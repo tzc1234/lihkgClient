@@ -16,12 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // init root view controller
-        let home = HomeController()
-        let nav  = UINavigationController()
-        nav.pushViewController(home, animated: false)
-        
-        window?.rootViewController = nav
-        window?.makeKeyAndVisible()
+//        let home = HomeController()
+//        let nav  = UINavigationController()
+//        nav.pushViewController(home, animated: false)
+//        
+//        window?.rootViewController = nav
+//        window?.makeKeyAndVisible()
         
         return true
     }

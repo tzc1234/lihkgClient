@@ -16,8 +16,12 @@
 		BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0991F23426000F4E990 /* HomeController.swift */; };
 		BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */; };
 		BEF663781F2489E8001D6450 /* Threads.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF663771F2489E8001D6450 /* Threads.swift */; };
+		BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF692D01F35B637002043AA /* ThreadCell.swift */; };
+		BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF692D11F35B637002043AA /* ThreadCell.xib */; };
+		BEF692D61F35C84C002043AA /* ThreadTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF692D51F35C84C002043AA /* ThreadTableView.swift */; };
 		BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF7D81A1F25D15E0029597A /* ThreadItem.swift */; };
 		BEF7D81D1F25E3F40029597A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF7D81C1F25E3F40029597A /* Category.swift */; };
+		BEFC57B61F34838900248830 /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC57B51F34838900248830 /* TableBinding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,8 +35,12 @@
 		BE8BB0991F23426000F4E990 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnect.swift; sourceTree = "<group>"; };
 		BEF663771F2489E8001D6450 /* Threads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threads.swift; sourceTree = "<group>"; };
+		BEF692D01F35B637002043AA /* ThreadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadCell.swift; sourceTree = "<group>"; };
+		BEF692D11F35B637002043AA /* ThreadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadCell.xib; sourceTree = "<group>"; };
+		BEF692D51F35C84C002043AA /* ThreadTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadTableView.swift; sourceTree = "<group>"; };
 		BEF7D81A1F25D15E0029597A /* ThreadItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
 		BEF7D81C1F25E3F40029597A /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		BEFC57B51F34838900248830 /* TableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBinding.swift; sourceTree = "<group>"; };
 		F036B448681753097A85B973 /* Pods-lihkgClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lihkgClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-lihkgClient/Pods-lihkgClient.release.xcconfig"; sourceTree = "<group>"; };
 		F4D34BC12BA8B8B7845BE024 /* Pods-lihkgClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lihkgClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lihkgClient/Pods-lihkgClient.debug.xcconfig"; sourceTree = "<group>"; };
 		FA13304BE505489C45E647C3 /* Pods_lihkgClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lihkgClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +87,9 @@
 		BE8BB0851F233B9B00F4E990 /* lihkgClient */ = {
 			isa = PBXGroup;
 			children = (
+				BEF692CF1F35B60E002043AA /* tableCell */,
+				BEF692D41F35C806002043AA /* tableView */,
+				BEFC57B41F34831D00248830 /* bindings */,
 				BEF663761F24898F001D6450 /* models */,
 				BE8BB09B1F2350BB00F4E990 /* helper */,
 				BE8BB0981F233CA500F4E990 /* controllers */,
@@ -116,6 +127,31 @@
 				BEF7D81C1F25E3F40029597A /* Category.swift */,
 			);
 			name = models;
+			sourceTree = "<group>";
+		};
+		BEF692CF1F35B60E002043AA /* tableCell */ = {
+			isa = PBXGroup;
+			children = (
+				BEF692D01F35B637002043AA /* ThreadCell.swift */,
+				BEF692D11F35B637002043AA /* ThreadCell.xib */,
+			);
+			name = tableCell;
+			sourceTree = "<group>";
+		};
+		BEF692D41F35C806002043AA /* tableView */ = {
+			isa = PBXGroup;
+			children = (
+				BEF692D51F35C84C002043AA /* ThreadTableView.swift */,
+			);
+			name = tableView;
+			sourceTree = "<group>";
+		};
+		BEFC57B41F34831D00248830 /* bindings */ = {
+			isa = PBXGroup;
+			children = (
+				BEFC57B51F34838900248830 /* TableBinding.swift */,
+			);
+			name = bindings;
 			sourceTree = "<group>";
 		};
 		C276110E2F20B5189BA84223 /* Pods */ = {
@@ -192,6 +228,7 @@
 				BE8BB0911F233B9B00F4E990 /* LaunchScreen.storyboard in Resources */,
 				BE8BB08E1F233B9B00F4E990 /* Assets.xcassets in Resources */,
 				BE8BB08C1F233B9B00F4E990 /* Main.storyboard in Resources */,
+				BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +287,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */,
+				BEF692D61F35C84C002043AA /* ThreadTableView.swift in Sources */,
+				BEFC57B61F34838900248830 /* TableBinding.swift in Sources */,
 				BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
 				BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */,

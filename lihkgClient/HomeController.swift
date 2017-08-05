@@ -19,11 +19,17 @@ class HomeController: UIViewController {
         self.title = "Home"
         self.view.backgroundColor = UIColor.gray
         
+        // init table binding
+//        let tableBinding = TableBinding()
+//        tableBinding.events.numOfRows = {
+//            return $0 * 10
+//        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        getPosts()
+//        getPosts()
     }
     
     private func getPosts() {
@@ -37,6 +43,8 @@ class HomeController: UIViewController {
                 self.threads = Threads(JSON: response)
                 let threadItems = self.threads!.items
                 print(threadItems?.toJSONString(prettyPrint: true) ?? "null")
+                
+                
 //                print(threadItems?[0].createDate ?? "null")
 //                print(threads!.toJSONString(prettyPrint: true) ?? "")
                 
@@ -49,7 +57,8 @@ class HomeController: UIViewController {
             }
             
         }
-    }
+    } // end getPost()
+    
 }
 
 
