@@ -49,4 +49,21 @@ class ThreadItem: Mappable {
         category <- map["category"]
     }
     
+    func rankText() -> String {
+        let rank: Int = Int(likeCount ?? "0")! - Int(dislikeCount ?? "0")!
+        if rank >= 0 { // postive rank
+            return "👍\(rank)"
+        } else { //negative
+            return "👎\(rank)"
+        }
+    }
+ 
+    func noOfReplyText() -> String {
+        return "📃\(noOfReply ?? "0")"
+    }
+    
+    func userText() -> String {
+        return "🙂\(userNickname ?? "")"
+    }
+    
 }

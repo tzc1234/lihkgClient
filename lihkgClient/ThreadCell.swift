@@ -28,4 +28,21 @@ class ThreadCell: UITableViewCell {
     }
     */
  
+    func setThreadItem(_ threadItem: ThreadItem) {
+        titleLabel.text = threadItem.title
+        userLabel.text = threadItem.userText()
+        
+        switch threadItem.userGender {
+        case "M"?:
+            userLabel.textColor = UIColor.cyan
+        case "F"?:
+            userLabel.textColor = UIColor.red
+        default:
+            userLabel.textColor = UIColor.white
+        }
+        
+        postCountLabel.text = threadItem.noOfReplyText()
+        rankLabel.text = threadItem.rankText()
+    }
+    
 }

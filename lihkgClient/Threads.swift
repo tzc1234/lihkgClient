@@ -11,7 +11,7 @@ import ObjectMapper
 
 class Threads: Mappable {
     
-    var category: Dictionary<String, Any>?
+    var category: Category?
     var isPagination: Bool = false
     var items: [ThreadItem]?
     

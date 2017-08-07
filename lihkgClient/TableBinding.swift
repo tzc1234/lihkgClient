@@ -21,7 +21,7 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
     weak var tableView: UITableView?
     
     var list: [[Any]] // 2-dimensional array
-    var tableRowHeight: CGFloat = 90 // default 90 row height
+    // var tableRowHeight: CGFloat = 90 // default 90 row height
     
     init(tableView: UITableView, list: [[Any]] = [[Any]]()) {
         print("TableBinding init called.")
@@ -55,11 +55,9 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         return events.numOfRows?(section) ?? list[section].count
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        print("height for row at")
-        return events.heightForRow?(indexPath) ?? tableRowHeight
-    }
-    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return events.heightForRow?(indexPath) ?? tableRowHeight
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return events.cellForRow?(indexPath, getRecord(indexPath: indexPath)) ?? UITableViewCell()
