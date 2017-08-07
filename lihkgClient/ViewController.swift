@@ -12,13 +12,28 @@ import Alamofire
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: ThreadTableView!
-    private var threads: Threads? // model property
-    private var tableBinding: TableBinding?
     
+    // model property
+    private var threads: Threads?
+    private var threadItems = [ThreadItem]()
+    
+    private var tableBinding: TableBinding?
     private let refreshControl = UIRefreshControl()
+    
+    // api call control variables
+    private var page = 1
+    private var processing = false
+    
+    // hide status bar when hidesBarsOnSwipe = true
+    // reference: https://stackoverflow.com/a/26007878
+    override var prefersStatusBarHidden: Bool {
+        return navigationController?.isNavigationBarHidden ?? false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.hidesBarsOnSwipe = true
         
         // register xib cell
         tableView.register(UINib.init(nibName: "ThreadCell", bundle: nil), forCellReuseIdentifier: "thread_cell")
@@ -39,42 +54,53 @@ class ViewController: UIViewController {
             
             return cell
         }
+        tableBinding?.events.tableReachBottom = { [weak self] in
+            guard (self?.processing)! else {
+                self?.getPosts()
+                return
+            }
+        }
         
         // add pull to refresh
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
+        // refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
         refreshControl.addTarget(self, action: #selector(refreshTable), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        getPosts()
+        getPosts() // api first call
     }
     
     private func getPosts() {
         let parameters: Parameters = [
-            "page": 1
+            "page": self.page
         ]
         
+        self.processing = true // api call processing
         ApiConnect.getThreads(parameters: parameters) { json, error in
+            self.processing = false // api call finished
+            
+            // print("getPost() called!")
+            
             if json != nil {
                 let response: Dictionary = json?["response"] as! Dictionary<String, Any>
                 
                 self.threads = Threads(JSON: response)
+                var newThreadItems: [ThreadItem]?
+                
                 if self.threads != nil {
-                    // set title
-                    self.title = self.threads?.category?.name
+                    self.title = self.threads?.category?.name // set title
                     // print("threadItems count = \(String(describing: self.threads!.items?.count ?? 0))")
+                    
+                    newThreadItems = self.threads!.items
+                    // print(newThreadItems?.toJSONString(prettyPrint: true) ?? "null")
                 }
                 
-                let threadItems = self.threads!.items
-//                print(threadItems?.toJSONString(prettyPrint: true) ?? "null")
-                
-                if threadItems != nil {
-                    self.tableBinding?.list = [threadItems!]
+                if newThreadItems != nil {
+                    self.threadItems += newThreadItems!
+                    self.tableBinding?.list = [self.threadItems]
                     self.tableBinding?.reload()
-                    print("set thread items and reload table called")
+                    
+                    self.page += 1 // update page value
+                    print("page = \(self.page).")
                 }
                 
                 if self.refreshControl.isRefreshing {
@@ -103,6 +129,8 @@ class ViewController: UIViewController {
     } // end getPost()
     
     func refreshTable(sender: AnyObject) {
+        self.page = 1 // reset page to 1
+        self.threadItems.removeAll() // clear all saved threadItems
         getPosts()
     }
     

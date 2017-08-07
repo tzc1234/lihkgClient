@@ -63,7 +63,8 @@ class ThreadItem: Mappable {
     }
     
     func userText() -> String {
-        return "🙂\(userNickname ?? "")"
+        let dateString = String(describing: lastReplyDate!)
+        return "\(userNickname ?? "") (\(dateString))"
     }
     
 }

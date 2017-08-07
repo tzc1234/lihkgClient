@@ -13,6 +13,7 @@ struct TableBindingEvent {
     var numOfRows: ((Int) -> Int)?
     var heightForRow: ((IndexPath) -> CGFloat)?
     var cellForRow: ((IndexPath, Any) -> UITableViewCell)?
+    var tableReachBottom: (() -> Void)?
 }
 
 class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -63,7 +64,20 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         return events.cellForRow?(indexPath, getRecord(indexPath: indexPath)) ?? UITableViewCell()
     }
  
-
+    // ************** scroll view delegate **************
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // calculates where the user is in the y-axis
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if offsetY >= contentHeight {
+            // print("reach bottom.")
+            events.tableReachBottom?()
+        }
+    }
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

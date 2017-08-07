@@ -25,7 +25,7 @@ class ApiConnect {
         Alamofire.request(wholeUrl, method: method, parameters: parameters, headers: baseHeaders).validate().responseJSON { response in
             switch response.result {
             case .success(let json):
-                print("Api call success")
+//                print("Api call success")
                 completion(json as? Dictionary, nil)
             case .failure(let error):
                 print(error)
