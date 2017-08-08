@@ -10,51 +10,52 @@ import Foundation
 import Alamofire
 import AlamofireObjectMapper
 
-class ApiConnect {
+// Singleton
+// Reference: https://stackoverflow.com/a/39860897
+final class ApiConnect {
     
-    // contants:
-    static let baseUrl = "https://lihkg.com/api_v1_1/"
-    static let baseHeaders: HTTPHeaders = [
-        "Accept": "application/json"
-    ]
+    static let sharedInstance = ApiConnect() // Shared Instance
+    
+    // instane variables
+    let baseUrl = "https://lihkg.com/api_v1_1/"
+    private let sessionManger: SessionManager // create session manger
+    private var headers = Alamofire.SessionManager.defaultHTTPHeaders // default headers
+    
+    // Can't init, is singleton
+    private init() {
+        // add custom header
+        // self.headers["Accept"] = "application/json"
+        
+        // create a custom session configuration
+        let configuration = URLSessionConfiguration.default
+        
+        // add the headers
+        // configuration.httpAdditionalHeaders = headers
+        
+        // create a session manager with the configuration
+        self.sessionManger = Alamofire.SessionManager(configuration: configuration)
+    }
     
     // functions:
-    static func sentRequest(_ lastUrl: String, method: HTTPMethod, parameters: Parameters?, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
+    
+    private func sentRequest(_ lastUrl: String, method: HTTPMethod, parameters: Parameters?, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
         let wholeUrl = baseUrl + lastUrl
 
-        Alamofire.request(wholeUrl, method: method, parameters: parameters, headers: baseHeaders).validate().responseJSON { response in
+        sessionManger.request(wholeUrl, method: method, parameters: parameters).validate().responseJSON { response in
+            
+            debugPrint(response)
+            
             switch response.result {
             case .success(let json):
-//                print("Api call success")
                 completion(json as? Dictionary, nil)
             case .failure(let error):
                 print(error)
                 completion(nil, error)
             }
         }
-        
-        
-//        Alamofire.request(wholeUrl, method: method, parameters: parameters, headers: baseHeaders)
-//            .validate()
-//            .responseObject { (response: DataResponse<PostTitle>) in
-//        
-//                switch response.result {
-//                case .success(let json):
-//                    print("Api call success")
-//                    
-//                    let postTitle = response.result.value
-//                    
-//                    completion(postTitle, nil)
-//                case .failure(let error):
-//                    print(error)
-//                    completion(nil, error)
-//                }
-//   
-//        }
-        
-    } // call()
+    } // end sentRequest()
     
-    static func getThreads(parameters: Parameters? = nil, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
+    func getThreads(parameters: Parameters? = nil, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
         sentRequest("thread/latest", method: .get, parameters: parameters, completion: completion)
     }
 }

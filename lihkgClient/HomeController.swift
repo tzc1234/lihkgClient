@@ -6,6 +6,7 @@
 //  Copyright © 2017年 lung. All rights reserved.
 //
 
+/*
 import UIKit
 import ObjectMapper
 
@@ -60,6 +61,7 @@ class HomeController: UIViewController {
     } // end getPost()
     
 }
+*/
 
 
 

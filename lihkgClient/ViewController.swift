@@ -62,7 +62,7 @@ class ViewController: UIViewController {
         }
         
         // add pull to refresh
-        // refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
         refreshControl.addTarget(self, action: #selector(refreshTable), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
@@ -74,9 +74,14 @@ class ViewController: UIViewController {
             "page": self.page
         ]
         
-        self.processing = true // api call processing
-        ApiConnect.getThreads(parameters: parameters) { json, error in
-            self.processing = false // api call finished
+        self.processing = true // mark api call processing
+        ApiConnect.sharedInstance.getThreads(parameters: parameters) { json, error in
+            self.processing = false // mark api call finished
+            
+            // stop table refreshing
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
             
             // print("getPost() called!")
             
@@ -102,12 +107,7 @@ class ViewController: UIViewController {
                     self.page += 1 // update page value
                     print("page = \(self.page).")
                 }
-                
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                
-                
+              
                 
                 //                print(threadItems?[0].createDate ?? "null")
                 //                print(threads!.toJSONString(prettyPrint: true) ?? "")
@@ -120,9 +120,6 @@ class ViewController: UIViewController {
                 
                 
             } else {
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
                 // do something when no json
             }
         }
