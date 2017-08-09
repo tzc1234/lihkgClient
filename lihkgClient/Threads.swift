@@ -29,4 +29,7 @@ class Threads: Mappable {
         items <- map["items"]
     }
     
+    deinit {
+        print("Threads obj dealloc")
+    }
 }

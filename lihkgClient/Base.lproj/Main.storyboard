@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QpW-dL-Z7J" customClass="ThreadTableView" customModule="lihkgClient" customModuleProvider="target">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QpW-dL-Z7J" customClass="ThreadTableView" customModule="lihkgClient" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -38,11 +38,30 @@
                     <navigationItem key="navigationItem" id="rTe-qK-07p"/>
                     <connections>
                         <outlet property="tableView" destination="QpW-dL-Z7J" id="nHO-c0-GmI"/>
+                        <segue destination="EWh-0D-gJo" kind="show" identifier="showThreadContentSegue" id="zNc-s3-6iC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1056.8" y="123.68815592203899"/>
+            <point key="canvasLocation" x="978" y="124"/>
+        </scene>
+        <!--Thread Content Controller-->
+        <scene sceneID="h0q-kQ-Ckh">
+            <objects>
+                <viewController id="EWh-0D-gJo" customClass="ThreadContentController" customModule="lihkgClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GYu-Dh-3GE"/>
+                        <viewControllerLayoutGuide type="bottom" id="jY7-33-cnZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4h0-wb-iwt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fiz-Qi-men" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1820" y="124"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qTt-q0-gA5">

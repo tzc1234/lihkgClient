@@ -25,5 +25,8 @@ class Category: Mappable {
         postable <- map["postable"]
     }
 
-    
+    /*
+    deinit {
+        print("Category obj dealloc")
+    }*/
 }

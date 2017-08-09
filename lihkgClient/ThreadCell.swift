@@ -28,6 +28,16 @@ class ThreadCell: UITableViewCell {
     }
     */
  
+    /*
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        print("ThreadCell INIT!!!!")
+        super.init(coder: aDecoder)
+    }*/
+    
     func setThreadItem(_ threadItem: ThreadItem) {
         titleLabel.text = threadItem.title
         userLabel.text = threadItem.userText()
@@ -45,4 +55,8 @@ class ThreadCell: UITableViewCell {
         rankLabel.text = threadItem.rankText()
     }
     
+    deinit {
+        print("ThreadCell dealloc.")
+    }
+
 }

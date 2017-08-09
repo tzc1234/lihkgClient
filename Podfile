@@ -6,6 +6,7 @@ target 'lihkgClient' do
   use_frameworks!
 
   # Pods for lihkgClient
-  pod 'Alamofire', '~> 4.4'
-  pod 'AlamofireObjectMapper', '~> 4.0'
+  pod 'Alamofire'
+  pod 'AlamofireObjectMapper'
+  pod 'DateToolsSwift'
 end

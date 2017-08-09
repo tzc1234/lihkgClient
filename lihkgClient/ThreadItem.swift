@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+import DateToolsSwift
 
 class ThreadItem: Mappable {
     
@@ -63,8 +64,14 @@ class ThreadItem: Mappable {
     }
     
     func userText() -> String {
-        let dateString = String(describing: lastReplyDate!)
-        return "\(userNickname ?? "") (\(dateString))"
+        return "\(userNickname ?? "")・\(lastReplyText())"
     }
     
+    func lastReplyText() -> String {
+        return lastReplyDate?.shortTimeAgoSinceNow ?? ""
+    }
+    
+    deinit {
+        print("ThreadItem obj dealloc")
+    }
 }

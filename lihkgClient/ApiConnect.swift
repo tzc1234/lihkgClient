@@ -17,7 +17,7 @@ final class ApiConnect {
     static let sharedInstance = ApiConnect() // Shared Instance
     
     // instane variables
-    let baseUrl = "https://lihkg.com/api_v1_1/"
+    private let baseUrl = "https://lihkg.com/api_v1_1/"
     private let sessionManger: SessionManager // create session manger
     private var headers = Alamofire.SessionManager.defaultHTTPHeaders // default headers
     
@@ -38,24 +38,13 @@ final class ApiConnect {
     
     // functions:
     
-    private func sentRequest(_ lastUrl: String, method: HTTPMethod, parameters: Parameters?, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
+    private func sentRequest(_ lastUrl: String, method: HTTPMethod, parameters: Parameters?) -> DataRequest {
         let wholeUrl = baseUrl + lastUrl
-
-        sessionManger.request(wholeUrl, method: method, parameters: parameters).validate().responseJSON { response in
-            
-            debugPrint(response)
-            
-            switch response.result {
-            case .success(let json):
-                completion(json as? Dictionary, nil)
-            case .failure(let error):
-                print(error)
-                completion(nil, error)
-            }
-        }
-    } // end sentRequest()
+        
+        return sessionManger.request(wholeUrl, method: method, parameters: parameters).validate()
+    }
     
-    func getThreads(parameters: Parameters? = nil, completion: @escaping (Dictionary<String, Any>?, Error?) -> Void) {
-        sentRequest("thread/latest", method: .get, parameters: parameters, completion: completion)
+    func getThreads(parameters: Parameters? = nil) -> DataRequest {
+        return sentRequest("thread/latest", method: .get, parameters: parameters)
     }
 }

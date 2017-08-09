@@ -14,8 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: ThreadTableView!
     
     // model property
-    private var threads: Threads?
-    private var threadItems = [ThreadItem]()
+    //private var threads: Threads?
     
     private var tableBinding: TableBinding?
     private let refreshControl = UIRefreshControl()
@@ -32,7 +31,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationController?.hidesBarsOnSwipe = true
         
         // register xib cell
@@ -41,7 +40,25 @@ class ViewController: UIViewController {
         tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        // set table binding
+        setTableBinding()
+        
+        // add pull to refresh
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
+        refreshControl.addTarget(self, action: #selector(refreshTable), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refreshControl)
+        
+        // getPosts()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showThreadContentSegue" {
+            if let nextCon = segue.destination as? ThreadContentController {
+                nextCon.threadItem = sender as? ThreadItem
+            }
+        }
+    }
+    
+    private func setTableBinding() {
         tableBinding = TableBinding(tableView: tableView)
         tableBinding?.setDataSource()
         tableBinding?.events.cellForRow = { [weak self] indexPath, record in
@@ -60,13 +77,9 @@ class ViewController: UIViewController {
                 return
             }
         }
-        
-        // add pull to refresh
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh.")
-        refreshControl.addTarget(self, action: #selector(refreshTable), for: UIControlEvents.valueChanged)
-        tableView.addSubview(refreshControl)
-        
-        getPosts() // api first call
+        tableBinding?.events.rowSelected = { [weak self] _, record in
+            self?.performSegue(withIdentifier: "showThreadContentSegue", sender: record)
+        }
     }
     
     private func getPosts() {
@@ -75,39 +88,46 @@ class ViewController: UIViewController {
         ]
         
         self.processing = true // mark api call processing
-        ApiConnect.sharedInstance.getThreads(parameters: parameters) { json, error in
-            self.processing = false // mark api call finished
+        ApiConnect.sharedInstance.getThreads(parameters: parameters).responseObject(keyPath: "response")
+        { [weak self] (response: DataResponse<Threads>) in
+            
+            self?.processing = false // mark api call finished
             
             // stop table refreshing
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
+            if (self?.refreshControl.isRefreshing)! {
+                self?.refreshControl.endRefreshing()
             }
             
-            // print("getPost() called!")
+            print("getPost() called!")
             
-            if json != nil {
-                let response: Dictionary = json?["response"] as! Dictionary<String, Any>
+            switch response.result {
+            case .success(let threads):
+                self?.title = threads.category?.name // set title
+
+                let newThreadItems = threads.items
+                // print(newThreadItems?.toJSONString(prettyPrint: true) ?? "null")
                 
-                self.threads = Threads(JSON: response)
-                var newThreadItems: [ThreadItem]?
-                
-                if self.threads != nil {
-                    self.title = self.threads?.category?.name // set title
-                    // print("threadItems count = \(String(describing: self.threads!.items?.count ?? 0))")
-                    
-                    newThreadItems = self.threads!.items
-                    // print(newThreadItems?.toJSONString(prettyPrint: true) ?? "null")
-                }
+                // print("threadItems count = \(String(describing: threads?.items?.count ?? 0))")
                 
                 if newThreadItems != nil {
-                    self.threadItems += newThreadItems!
-                    self.tableBinding?.list = [self.threadItems]
-                    self.tableBinding?.reload()
+                    //self.threadItems += newThreadItems!
                     
-                    self.page += 1 // update page value
-                    print("page = \(self.page).")
+                    let previousList = self?.tableBinding?.list.first
+                    if previousList != nil {
+                        // append threadItems for endless load
+                        let previousThreadItems = (previousList as! [ThreadItem]) + newThreadItems!
+                        self?.tableBinding?.list = [previousThreadItems]
+                    } else {
+                        let previousThreadItems = newThreadItems!
+                        self?.tableBinding?.list = [previousThreadItems]
+                    }
+                    
+                    self?.tableBinding?.reload()
+                    
+                    // self.page += 1 // update page value
+                    // print("page = \(self.page).")
                 }
-              
+                
                 
                 //                print(threadItems?[0].createDate ?? "null")
                 //                print(threads!.toJSONString(prettyPrint: true) ?? "")
@@ -117,17 +137,15 @@ class ViewController: UIViewController {
                 //                    print("key = \(key), value = \(value)")
                 //                }
                 
-                
-                
-            } else {
-                // do something when no json
+            case .failure(let error):
+                print(error)
             }
         }
     } // end getPost()
     
     func refreshTable(sender: AnyObject) {
         self.page = 1 // reset page to 1
-        self.threadItems.removeAll() // clear all saved threadItems
+        self.tableBinding?.clearList() // clear list
         getPosts()
     }
     

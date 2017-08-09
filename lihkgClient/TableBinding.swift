@@ -12,8 +12,9 @@ struct TableBindingEvent {
     var numOfSections: (() -> Int)?
     var numOfRows: ((Int) -> Int)?
     var heightForRow: ((IndexPath) -> CGFloat)?
-    var cellForRow: ((IndexPath, Any) -> UITableViewCell)?
+    var cellForRow: ((IndexPath, Any?) -> UITableViewCell)?
     var tableReachBottom: (() -> Void)?
+    var rowSelected: ((IndexPath, Any?) -> Void)?
 }
 
 class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -40,8 +41,16 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         tableView?.reloadData()
     }
     
-    func getRecord(indexPath: IndexPath) -> Any {
+    func getRecord(indexPath: IndexPath) -> Any? {
+        if list.count == 0 {
+            return nil
+        }
         return list[indexPath.section][indexPath.row]
+    }
+    
+    func clearList() {
+        list.removeAll()
+        list = [[Any]]()
     }
     
     // ************* delegate functions *************
@@ -64,6 +73,11 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         return events.cellForRow?(indexPath, getRecord(indexPath: indexPath)) ?? UITableViewCell()
     }
  
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // print("did select")
+        events.rowSelected?(indexPath, getRecord(indexPath: indexPath))
+    }
+    
     // ************** scroll view delegate **************
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -77,6 +91,9 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    deinit {
+        print("TableBinding dealloc.")
+    }
     
     /*
     // Override to support conditional editing of the table view.

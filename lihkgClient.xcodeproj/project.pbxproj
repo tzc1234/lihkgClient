@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		158182734182C2B36132F75C /* Pods_lihkgClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA13304BE505489C45E647C3 /* Pods_lihkgClient.framework */; };
+		BE051D591F39A1A2000FD702 /* ThreadContentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE051D581F39A1A2000FD702 /* ThreadContentController.swift */; };
 		BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0861F233B9B00F4E990 /* AppDelegate.swift */; };
 		BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0881F233B9B00F4E990 /* ViewController.swift */; };
 		BE8BB08C1F233B9B00F4E990 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8BB08A1F233B9B00F4E990 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE051D581F39A1A2000FD702 /* ThreadContentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentController.swift; sourceTree = "<group>"; };
 		BE8BB0831F233B9B00F4E990 /* lihkgClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lihkgClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE8BB0861F233B9B00F4E990 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE8BB0881F233B9B00F4E990 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			children = (
 				BE8BB0991F23426000F4E990 /* HomeController.swift */,
 				BE8BB0881F233B9B00F4E990 /* ViewController.swift */,
+				BE051D581F39A1A2000FD702 /* ThreadContentController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE051D591F39A1A2000FD702 /* ThreadContentController.swift in Sources */,
 				BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */,
 				BEF692D61F35C84C002043AA /* ThreadTableView.swift in Sources */,
 				BEFC57B61F34838900248830 /* TableBinding.swift in Sources */,
