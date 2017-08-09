@@ -28,9 +28,7 @@ class ThreadItem: Mappable {
     
     var category: Category?
     
-    required init?(map: Map) {
-        
-    }
+    required init?(map: Map) {}
     
     func mapping(map: Map) {
         threadId <- map["thread_id"]

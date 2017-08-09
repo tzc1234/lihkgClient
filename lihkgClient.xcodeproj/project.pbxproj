@@ -16,6 +16,11 @@
 		BE8BB0911F233B9B00F4E990 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8BB08F1F233B9B00F4E990 /* LaunchScreen.storyboard */; };
 		BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0991F23426000F4E990 /* HomeController.swift */; };
 		BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */; };
+		BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA21F3B082900987A75 /* ThreadContent.swift */; };
+		BEF41AA51F3B0AE600987A75 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA41F3B0AE600987A75 /* User.swift */; };
+		BEF41AA71F3B0F1C00987A75 /* ThreadContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA61F3B0F1C00987A75 /* ThreadContentData.swift */; };
+		BEF41AAA1F3B23A600987A75 /* ThreadContentDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */; };
+		BEF41AAB1F3B23A600987A75 /* ThreadContentDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */; };
 		BEF663781F2489E8001D6450 /* Threads.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF663771F2489E8001D6450 /* Threads.swift */; };
 		BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF692D01F35B637002043AA /* ThreadCell.swift */; };
 		BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF692D11F35B637002043AA /* ThreadCell.xib */; };
@@ -36,6 +41,11 @@
 		BE8BB0921F233B9B00F4E990 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE8BB0991F23426000F4E990 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnect.swift; sourceTree = "<group>"; };
+		BEF41AA21F3B082900987A75 /* ThreadContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContent.swift; sourceTree = "<group>"; };
+		BEF41AA41F3B0AE600987A75 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BEF41AA61F3B0F1C00987A75 /* ThreadContentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentData.swift; sourceTree = "<group>"; };
+		BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentDataCell.swift; sourceTree = "<group>"; };
+		BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadContentDataCell.xib; sourceTree = "<group>"; };
 		BEF663771F2489E8001D6450 /* Threads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threads.swift; sourceTree = "<group>"; };
 		BEF692D01F35B637002043AA /* ThreadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadCell.swift; sourceTree = "<group>"; };
 		BEF692D11F35B637002043AA /* ThreadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadCell.xib; sourceTree = "<group>"; };
@@ -128,6 +138,9 @@
 				BEF663771F2489E8001D6450 /* Threads.swift */,
 				BEF7D81A1F25D15E0029597A /* ThreadItem.swift */,
 				BEF7D81C1F25E3F40029597A /* Category.swift */,
+				BEF41AA21F3B082900987A75 /* ThreadContent.swift */,
+				BEF41AA41F3B0AE600987A75 /* User.swift */,
+				BEF41AA61F3B0F1C00987A75 /* ThreadContentData.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -137,6 +150,8 @@
 			children = (
 				BEF692D01F35B637002043AA /* ThreadCell.swift */,
 				BEF692D11F35B637002043AA /* ThreadCell.xib */,
+				BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */,
+				BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */,
 			);
 			name = tableCell;
 			sourceTree = "<group>";
@@ -229,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE8BB0911F233B9B00F4E990 /* LaunchScreen.storyboard in Resources */,
+				BEF41AAB1F3B23A600987A75 /* ThreadContentDataCell.xib in Resources */,
 				BE8BB08E1F233B9B00F4E990 /* Assets.xcassets in Resources */,
 				BE8BB08C1F233B9B00F4E990 /* Main.storyboard in Resources */,
 				BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */,
@@ -290,17 +306,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF41AAA1F3B23A600987A75 /* ThreadContentDataCell.swift in Sources */,
+				BEF41AA51F3B0AE600987A75 /* User.swift in Sources */,
 				BE051D591F39A1A2000FD702 /* ThreadContentController.swift in Sources */,
 				BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */,
 				BEF692D61F35C84C002043AA /* ThreadTableView.swift in Sources */,
 				BEFC57B61F34838900248830 /* TableBinding.swift in Sources */,
 				BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */,
+				BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
 				BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */,
 				BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */,
 				BEF663781F2489E8001D6450 /* Threads.swift in Sources */,
 				BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */,
 				BEF7D81D1F25E3F40029597A /* Category.swift in Sources */,
+				BEF41AA71F3B0F1C00987A75 /* ThreadContentData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

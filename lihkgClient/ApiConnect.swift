@@ -47,4 +47,9 @@ final class ApiConnect {
     func getThreads(parameters: Parameters? = nil) -> DataRequest {
         return sentRequest("thread/latest", method: .get, parameters: parameters)
     }
+    
+    func getThreadContent(threadId: String, page: String, parameters: Parameters? = nil) -> DataRequest {
+        return sentRequest("thread/\(threadId)/page/\(page)", method: .get, parameters: parameters)
+    }
+    
 }

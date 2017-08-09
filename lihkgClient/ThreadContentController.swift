@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ThreadContentController: UIViewController {
 
@@ -16,7 +17,7 @@ class ThreadContentController: UIViewController {
         super.viewDidLoad()
         title = threadItem?.title
         
-        
+        getThreadContent()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -24,16 +25,25 @@ class ThreadContentController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func getThreadContent() {
+        let parameters: Parameters = [
+            "order": "reply_time"
+        ]
+        
+        ApiConnect.sharedInstance.getThreadContent(threadId: (threadItem?.threadId ?? ""), page: "1", parameters: parameters).responseObject(keyPath: "response")
+        { [weak self] (response: DataResponse<ThreadContent>) in
+            
+            switch response.result {
+            case .success(let threadContent):
+                print(threadContent.toJSONString(prettyPrint: true) ?? "nil")
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
     }
-    */
-
+    
+    
     deinit {
         print("ThreadContentController")
     }
