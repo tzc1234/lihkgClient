@@ -23,7 +23,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QpW-dL-Z7J" customClass="ThreadTableView" customModule="lihkgClient" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
@@ -56,12 +56,28 @@
                     <view key="view" contentMode="scaleToFill" id="4h0-wb-iwt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TU9-lz-Zuc">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="TU9-lz-Zuc" secondAttribute="trailing" id="WT2-mp-fPg"/>
+                            <constraint firstItem="TU9-lz-Zuc" firstAttribute="leading" secondItem="4h0-wb-iwt" secondAttribute="leading" id="eQj-fB-QrZ"/>
+                            <constraint firstItem="TU9-lz-Zuc" firstAttribute="bottom" secondItem="jY7-33-cnZ" secondAttribute="top" id="vid-cP-d5c"/>
+                            <constraint firstItem="TU9-lz-Zuc" firstAttribute="top" secondItem="4h0-wb-iwt" secondAttribute="top" id="weN-s4-yy4"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="TU9-lz-Zuc" id="zCp-lC-xW5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fiz-Qi-men" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1820" y="124"/>
+            <point key="canvasLocation" x="1820" y="123.68815592203899"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qTt-q0-gA5">

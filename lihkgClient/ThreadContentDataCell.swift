@@ -10,6 +10,11 @@ import UIKit
 
 class ThreadContentDataCell: UITableViewCell {
 
+    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var likeButton: UIButton!
+    
+    /*
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -19,6 +24,12 @@ class ThreadContentDataCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }*/
+    
+    func setThreadContentData(threadContentData: ThreadContentData) {
+        messageLabel.text = threadContentData.msg
+        titleLabel.text = threadContentData.titleText()
+        likeButton.setTitle(threadContentData.likeCountDislikeCountText(), for: .normal)
     }
     
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+import DateToolsSwift
 
 class ThreadContentData: Mappable {
     
@@ -38,13 +39,25 @@ class ThreadContentData: Mappable {
         dislikeCount <- map["dislike_count"]
         voteScore <- map["vote_score"]
         
-        replyDate <- (map["reply_date"], DateTransform())
+        replyDate <- (map["reply_time"], DateTransform())
         msg <- map["msg"]
         
         user <- map["user"]
         msgNum <- map["msg_num"]
         score <- map["score"]
         page <- map["page"]
+    }
+    
+    func titleText() -> String {
+        return "#\(msgNum ?? 0) \(userNickname ?? "")・\(replyDateText())"
+    }
+    
+    func replyDateText() -> String {
+        return replyDate?.shortTimeAgoSinceNow ?? ""
+    }
+    
+    func likeCountDislikeCountText() -> String {
+        return "👍\(likeCount ?? "0")　👎\(dislikeCount ?? "0")"
     }
     
 }

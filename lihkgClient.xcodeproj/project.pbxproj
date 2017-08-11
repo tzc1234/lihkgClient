@@ -14,7 +14,6 @@
 		BE8BB08C1F233B9B00F4E990 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8BB08A1F233B9B00F4E990 /* Main.storyboard */; };
 		BE8BB08E1F233B9B00F4E990 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE8BB08D1F233B9B00F4E990 /* Assets.xcassets */; };
 		BE8BB0911F233B9B00F4E990 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8BB08F1F233B9B00F4E990 /* LaunchScreen.storyboard */; };
-		BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0991F23426000F4E990 /* HomeController.swift */; };
 		BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */; };
 		BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA21F3B082900987A75 /* ThreadContent.swift */; };
 		BEF41AA51F3B0AE600987A75 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA41F3B0AE600987A75 /* User.swift */; };
@@ -39,7 +38,6 @@
 		BE8BB08D1F233B9B00F4E990 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE8BB0901F233B9B00F4E990 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE8BB0921F233B9B00F4E990 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BE8BB0991F23426000F4E990 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnect.swift; sourceTree = "<group>"; };
 		BEF41AA21F3B082900987A75 /* ThreadContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContent.swift; sourceTree = "<group>"; };
 		BEF41AA41F3B0AE600987A75 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 		BE8BB0981F233CA500F4E990 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				BE8BB0991F23426000F4E990 /* HomeController.swift */,
 				BE8BB0881F233B9B00F4E990 /* ViewController.swift */,
 				BE051D581F39A1A2000FD702 /* ThreadContentController.swift */,
 			);
@@ -315,7 +312,6 @@
 				BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */,
 				BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
-				BE8BB09A1F23426000F4E990 /* HomeController.swift in Sources */,
 				BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */,
 				BEF663781F2489E8001D6450 /* Threads.swift in Sources */,
 				BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */,
