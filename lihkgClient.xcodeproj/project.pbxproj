@@ -20,6 +20,7 @@
 		BEF41AA71F3B0F1C00987A75 /* ThreadContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA61F3B0F1C00987A75 /* ThreadContentData.swift */; };
 		BEF41AAA1F3B23A600987A75 /* ThreadContentDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */; };
 		BEF41AAB1F3B23A600987A75 /* ThreadContentDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */; };
+		BEF4F8821F41B30300C7A80F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4F8811F41B30300C7A80F /* Extensions.swift */; };
 		BEF663781F2489E8001D6450 /* Threads.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF663771F2489E8001D6450 /* Threads.swift */; };
 		BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF692D01F35B637002043AA /* ThreadCell.swift */; };
 		BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF692D11F35B637002043AA /* ThreadCell.xib */; };
@@ -44,6 +45,7 @@
 		BEF41AA61F3B0F1C00987A75 /* ThreadContentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentData.swift; sourceTree = "<group>"; };
 		BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentDataCell.swift; sourceTree = "<group>"; };
 		BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadContentDataCell.xib; sourceTree = "<group>"; };
+		BEF4F8811F41B30300C7A80F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BEF663771F2489E8001D6450 /* Threads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threads.swift; sourceTree = "<group>"; };
 		BEF692D01F35B637002043AA /* ThreadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadCell.swift; sourceTree = "<group>"; };
 		BEF692D11F35B637002043AA /* ThreadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadCell.xib; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		BE8BB0851F233B9B00F4E990 /* lihkgClient */ = {
 			isa = PBXGroup;
 			children = (
+				BEF4F8801F41B2E200C7A80F /* extensions */,
 				BEF692CF1F35B60E002043AA /* tableCell */,
 				BEF692D41F35C806002043AA /* tableView */,
 				BEFC57B41F34831D00248830 /* bindings */,
@@ -127,6 +130,14 @@
 				BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */,
 			);
 			name = helper;
+			sourceTree = "<group>";
+		};
+		BEF4F8801F41B2E200C7A80F /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BEF4F8811F41B30300C7A80F /* Extensions.swift */,
+			);
+			name = extensions;
 			sourceTree = "<group>";
 		};
 		BEF663761F24898F001D6450 /* models */ = {
@@ -313,6 +324,7 @@
 				BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
 				BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */,
+				BEF4F8821F41B30300C7A80F /* Extensions.swift in Sources */,
 				BEF663781F2489E8001D6450 /* Threads.swift in Sources */,
 				BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */,
 				BEF7D81D1F25E3F40029597A /* Category.swift in Sources */,

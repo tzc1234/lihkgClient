@@ -28,7 +28,7 @@ class ThreadContentDataCell: UITableViewCell {
     
     func setThreadContentData(threadContentData: ThreadContentData) {
         messageLabel.text = threadContentData.msg
-        titleLabel.text = threadContentData.titleText()
+        titleLabel.attributedText = threadContentData.titleAttrsString()
         likeButton.setTitle(threadContentData.likeCountDislikeCountText(), for: .normal)
     }
     

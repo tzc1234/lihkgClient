@@ -48,8 +48,31 @@ class ThreadContentData: Mappable {
         page <- map["page"]
     }
     
-    func titleText() -> String {
-        return "#\(msgNum ?? 0) \(userNickname ?? "")・\(replyDateText())"
+    func msgNumAttrString() -> NSMutableAttributedString {
+        let attrs = [
+            NSForegroundColorAttributeName: UIColor.orange,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 14)
+        ]
+        return "#\(msgNum ?? 0) ".toAttrsString(attrs: attrs)
+    }
+    
+    func userNicknameAttrsString() -> NSMutableAttributedString {
+        let attrs = [
+            NSForegroundColorAttributeName: (userGender == "M" ? UIColor.cyan : UIColor.red)
+        ]
+        return "\(userNickname ?? "")".toAttrsString(attrs: attrs)
+    }
+    
+    func replyDateAttrsString() -> NSMutableAttributedString {
+        let attrs = [
+            NSForegroundColorAttributeName: UIColor.gray,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 12)
+        ]
+        return "・\(replyDateText())".toAttrsString(attrs: attrs)
+    }
+    
+    func titleAttrsString() -> NSMutableAttributedString {
+        return msgNumAttrString() + userNicknameAttrsString() + replyDateAttrsString()
     }
     
     func replyDateText() -> String {
