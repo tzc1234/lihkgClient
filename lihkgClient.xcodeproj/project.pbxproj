@@ -28,6 +28,7 @@
 		BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF7D81A1F25D15E0029597A /* ThreadItem.swift */; };
 		BEF7D81D1F25E3F40029597A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF7D81C1F25E3F40029597A /* Category.swift */; };
 		BEFC57B61F34838900248830 /* TableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC57B51F34838900248830 /* TableBinding.swift */; };
+		BEFC8F561F42E3AE001AB34C /* HtmlTagConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		BEF7D81A1F25D15E0029597A /* ThreadItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
 		BEF7D81C1F25E3F40029597A /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		BEFC57B51F34838900248830 /* TableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBinding.swift; sourceTree = "<group>"; };
+		BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlTagConverter.swift; sourceTree = "<group>"; };
 		F036B448681753097A85B973 /* Pods-lihkgClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lihkgClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-lihkgClient/Pods-lihkgClient.release.xcconfig"; sourceTree = "<group>"; };
 		F4D34BC12BA8B8B7845BE024 /* Pods-lihkgClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lihkgClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lihkgClient/Pods-lihkgClient.debug.xcconfig"; sourceTree = "<group>"; };
 		FA13304BE505489C45E647C3 /* Pods_lihkgClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lihkgClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */,
+				BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */,
 			);
 			name = helper;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
 				BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */,
+				BEFC8F561F42E3AE001AB34C /* HtmlTagConverter.swift in Sources */,
 				BEF4F8821F41B30300C7A80F /* Extensions.swift in Sources */,
 				BEF663781F2489E8001D6450 /* Threads.swift in Sources */,
 				BEF7D81B1F25D15E0029597A /* ThreadItem.swift in Sources */,

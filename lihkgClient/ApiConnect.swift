@@ -17,7 +17,8 @@ final class ApiConnect {
     static let sharedInstance = ApiConnect() // Shared Instance
     
     // instane variables
-    private let baseUrl = "https://lihkg.com/api_v1_1/"
+    private let baseUrl = "https://lihkg.com/"
+    private let apiUrl = "api_v1_1/"
     private let sessionManger: SessionManager // create session manger
     private var headers = Alamofire.SessionManager.defaultHTTPHeaders // default headers
     
@@ -39,7 +40,7 @@ final class ApiConnect {
     // functions:
     
     private func sentRequest(_ lastUrl: String, method: HTTPMethod, parameters: Parameters?) -> DataRequest {
-        let wholeUrl = baseUrl + lastUrl
+        let wholeUrl = baseUrl + apiUrl + lastUrl
         
         return sessionManger.request(wholeUrl, method: method, parameters: parameters).validate()
     }

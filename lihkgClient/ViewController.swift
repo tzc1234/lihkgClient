@@ -48,6 +48,9 @@ class ViewController: UIViewController {
         tableView.addSubview(refreshControl)
         
         // getPosts()
+        
+        // test code:
+        HtmlTagConverter.sharedInstance.parseMsg()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -73,7 +76,7 @@ class ViewController: UIViewController {
         }
         tableBinding?.events.tableReachBottom = { [weak self] in
             guard (self?.processing)! else {
-                self?.getPosts()
+                // self?.getPosts() TODO temp comments
                 return
             }
         }

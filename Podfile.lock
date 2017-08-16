@@ -5,18 +5,21 @@ PODS:
     - ObjectMapper (~> 2.0)
   - DateToolsSwift (2.0.3)
   - ObjectMapper (2.2.8)
+  - SwiftSoup (1.4.2)
 
 DEPENDENCIES:
   - Alamofire
   - AlamofireObjectMapper
   - DateToolsSwift
+  - SwiftSoup
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
   DateToolsSwift: bf69bf9056d9e53c5c03f06e51f219b9b8b02f9e
   ObjectMapper: 3d571bb5af471c779e1160828cd9ad5c4ef90958
+  SwiftSoup: 9638363718859b469c3d7877b2b6a640348bacb7
 
-PODFILE CHECKSUM: 5130f0ceaf3dabb5b5623729cc45e355b65360c5
+PODFILE CHECKSUM: 4b767e09dc7cad633c1dc3f07cc927904e5551f0
 
 COCOAPODS: 1.2.1
