@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftSoup
+import SwiftGifOrigin
 
 final class HtmlTagConverter {
 
@@ -53,7 +54,7 @@ final class HtmlTagConverter {
 //            print("linkRangeDic : \(result.linkRangeDic)")
             
             
-            print("result str : \(result.attributedMsg)")
+//            print("result str : \(result.attributedMsg)")
             
             return result
         } else {
@@ -123,21 +124,25 @@ final class HtmlTagConverter {
                     attributedMsg.append(attributedStr)
                 }
             case "img":
-//                let src = node.getAttributes()?.get(key: "src")
-//                print("nodeLevel\(proLevel) src -> \(src ?? "")")
-//                
-//                let klass = node.getAttributes()?.get(key: "class")
+                let klass = node.getAttributes()?.get(key: "class")
 //                print("nodeLevel\(proLevel) class -> \(klass ?? "")")
-                
-                
-                let img = UIImage(named: "faces/lomoji/02")
-                let attachment = NSTextAttachment()
-                attachment.image = img
-                let attachmentString = NSAttributedString(attachment: attachment)
-                let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
-                attributedMsg.append(mutableAttachmentString)
-                
-                
+                if klass == "hkgmoji" {
+                    if var src = node.getAttributes()?.get(key: "src") {
+                        src.remove(at: src.startIndex)
+                        let filePath = src.components(separatedBy: ".")
+                        // print("nodeLevel\(proLevel) src -> \(filePath.first ?? "")")
+                        
+                        if filePath.first != nil {
+                            //let img = UIImage(named: "faces/lomoji/02")
+                            let img = UIImage.gif(name: filePath.first!)
+                            let attachment = NSTextAttachment()
+                            attachment.image = img
+                            let attachmentString = NSAttributedString(attachment: attachment)
+                            let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
+                            attributedMsg.append(mutableAttachmentString)
+                        }
+                    }
+                }
             case "a":
                 if let href = node.getAttributes()?.get(key: "href") {
                     let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim spaces in href
@@ -146,7 +151,7 @@ final class HtmlTagConverter {
                             // NSLinkAttributeName: URL(string: trimmedHref) ?? "",
                             NSFontAttributeName: UIFont.systemFont(ofSize: 14),
                             NSForegroundColorAttributeName: UIColor.green,
-                            NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
+                            // NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
                         ])
                     
                     // calculate nsrange
@@ -166,8 +171,7 @@ final class HtmlTagConverter {
 //                    print("nodeLevel\(proLevel) href -> \(trimmedHref)")
                 }
             default:
-                // default append text
-                if let text = node.getAttributes()?.get(key: "text") {
+                if let text = node.getAttributes()?.get(key: "text") { // default append text
 //                    print("nodeLevel\(proLevel) default text -> \(text)")
                     let attributedStr = text.toAttrsString(attrs: attrs)
                     attributedMsg.append(attributedStr)

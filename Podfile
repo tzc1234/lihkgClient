@@ -10,4 +10,5 @@ target 'lihkgClient' do
   pod 'AlamofireObjectMapper'
   pod 'DateToolsSwift'
   pod 'SwiftSoup'
+  pod 'SwiftGifOrigin'
 end

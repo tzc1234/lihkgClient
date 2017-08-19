@@ -74,7 +74,7 @@ class ThreadContentDataCell: UITableViewCell {
         
         let indexOfCharacter = layoutManagerCustom.characterIndex(for: locationOfTouchInTextContainer, in: textContainer,fractionOfDistanceBetweenInsertionPoints:nil)
         
-        print("indexOfCharacter : \(indexOfCharacter)")
+//        print("indexOfCharacter : \(indexOfCharacter)")
         
         // check the indexOfCharacter in which range of the link
         if self.linkRangeDic != nil {
