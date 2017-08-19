@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		158182734182C2B36132F75C /* Pods_lihkgClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA13304BE505489C45E647C3 /* Pods_lihkgClient.framework */; };
+		BE00F3A61F46E00D00BF94A7 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = BE00F3A51F46E00D00BF94A7 /* assets */; };
 		BE051D591F39A1A2000FD702 /* ThreadContentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE051D581F39A1A2000FD702 /* ThreadContentController.swift */; };
 		BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0861F233B9B00F4E990 /* AppDelegate.swift */; };
 		BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BB0881F233B9B00F4E990 /* ViewController.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE00F3A51F46E00D00BF94A7 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = lihkgClient/assets; sourceTree = "<group>"; };
 		BE051D581F39A1A2000FD702 /* ThreadContentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentController.swift; sourceTree = "<group>"; };
 		BE8BB0831F233B9B00F4E990 /* lihkgClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lihkgClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE8BB0861F233B9B00F4E990 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		BE8BB07A1F233B9B00F4E990 = {
 			isa = PBXGroup;
 			children = (
+				BE00F3A51F46E00D00BF94A7 /* assets */,
 				BE8BB0851F233B9B00F4E990 /* lihkgClient */,
 				BE8BB0841F233B9B00F4E990 /* Products */,
 				C276110E2F20B5189BA84223 /* Pods */,
@@ -101,12 +104,11 @@
 		BE8BB0851F233B9B00F4E990 /* lihkgClient */ = {
 			isa = PBXGroup;
 			children = (
-				BEF4F8801F41B2E200C7A80F /* extensions */,
 				BEF692CF1F35B60E002043AA /* tableCell */,
 				BEF692D41F35C806002043AA /* tableView */,
 				BEFC57B41F34831D00248830 /* bindings */,
 				BEF663761F24898F001D6450 /* models */,
-				BE8BB09B1F2350BB00F4E990 /* helper */,
+				BE8BB09B1F2350BB00F4E990 /* helpers */,
 				BE8BB0981F233CA500F4E990 /* controllers */,
 				BE8BB0861F233B9B00F4E990 /* AppDelegate.swift */,
 				BE8BB08A1F233B9B00F4E990 /* Main.storyboard */,
@@ -126,21 +128,14 @@
 			name = controllers;
 			sourceTree = "<group>";
 		};
-		BE8BB09B1F2350BB00F4E990 /* helper */ = {
-			isa = PBXGroup;
-			children = (
-				BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */,
-				BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */,
-			);
-			name = helper;
-			sourceTree = "<group>";
-		};
-		BEF4F8801F41B2E200C7A80F /* extensions */ = {
+		BE8BB09B1F2350BB00F4E990 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
 				BEF4F8811F41B30300C7A80F /* Extensions.swift */,
+				BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */,
+				BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */,
 			);
-			name = extensions;
+			name = helpers;
 			sourceTree = "<group>";
 		};
 		BEF663761F24898F001D6450 /* models */ = {
@@ -254,6 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE00F3A61F46E00D00BF94A7 /* assets in Resources */,
 				BE8BB0911F233B9B00F4E990 /* LaunchScreen.storyboard in Resources */,
 				BEF41AAB1F3B23A600987A75 /* ThreadContentDataCell.xib in Resources */,
 				BE8BB08E1F233B9B00F4E990 /* Assets.xcassets in Resources */,

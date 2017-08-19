@@ -13,9 +13,6 @@ final class HtmlTagConverter {
 
     static let sharedInstance = HtmlTagConverter() // Shared Instance
     
-    // patterns
-    private let colorPattern = "<span style=\"color: (\\w+);\">(.*)</span>"
-    
     // color dictionary
     private let colorDic = [
         "color: red;": UIColor.red,
@@ -43,117 +40,142 @@ final class HtmlTagConverter {
         "font-size: xx-large;": UIFont.systemFont(ofSize: 24)
     ]
     
-    private init() {
-        
-    }
+    private init() {}
     
-    func convertString(_ rawString: String) -> NSMutableAttributedString {
-        
-        return NSMutableAttributedString()
-    }
-    
-    func parseMsg() {
-        let rawMsg = "Add咗條女, 傾咗成個禮拜.....<img src=\"/assets/faces/normal/angry.gif\" class=\"hkgmoji\" /><br />\n最後露出狐狸尾巴<img src=\"/assets/faces/normal/frown.gif\" class=\"hkgmoji\" /><br />\n唉....."
-        let html = "<div>\(rawMsg)</div>"
-        
-        //var substringDic = [String: [String: Any]]()
-        
-        do {
-            //let doc: Document = try SwiftSoup.parseBodyFragment(html)
-            let divElements = try SwiftSoup.parse(html).select("div")
-            
-//            let divText = try! divElement.text()
-//            let attributedMsg = NSMutableAttributedString(string: divText)
-//            print("string_without_tag = \(attributedMsg.string)")
-            
-//            for element in try! divElement.select("span") {
-//                switch element.tagName() {
-//                case "span":
-//                    break
-//                default:
-//                    break
-//                }
-                
-//                print("tagName -> \(element.tagName())")
-//                let style = try! element.attr("style")
-//                print("style -> \(style)")
-//                print("element -> \(try! element.text())")
-                
-//            }
-            
-            //let eles = divElement.
-            
-            // let children = divElements.first()?.children()
-//            let divTextNodes = divElements.first()?.textNodes()
-//            for divTextNode in divTextNodes! {
-//                print(divTextNode.text())
-//            }
-            
-            
-            // convertChildrenToAttributedString(children: children!)
-
+    // TODO handle expection
+    func parseMsg(_ rawMsg: String?) -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]]) {
+        if rawMsg != nil {
+            let html = "<div>\(rawMsg!)</div>"
+            let divElements = try! SwiftSoup.parse(html).select("div")
             let nodes = divElements.first()?.getChildNodes()
-            print("\n\(convertNodesToAttributedString(nodes: nodes!))")
+            
+            let result = convertNodesToAttributedString(nodes: nodes!)
+//            print("linkRangeDic : \(result.linkRangeDic)")
             
             
+            print("result str : \(result.attributedMsg)")
             
-        } catch Exception.Error( _, let message){
-            print(message)
-        } catch {
-            print("error")
+            return result
+        } else {
+            return (NSMutableAttributedString(), [:])
         }
-        
     }
     
-    private func convertNodesToAttributedString(nodes: [Node], level: Int = 0) -> String {
+//    func parseMsg2() {
+//        let rawMsg = ""
+//        let html = "\(rawMsg)"
+//        
+//        do {
+//            
+//            let rootElements = try SwiftSoup.parse(html).select("ul")
+//
+//            let nodes = rootElements.first()?.getChildNodes()
+//            print("\n\(convertNodesToAttributedString(nodes: nodes!))")
+//            
+//            
+//            
+//        } catch Exception.Error( _, let message){
+//            print(message)
+//        } catch {
+//            print("error")
+//        }
+//        
+//    }
+    
+    private func convertNodesToAttributedString(nodes: [Node], level: Int = 0, attrs: [String: Any] = [
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 17)
+        ], linkRangeDic: [String: [NSRange]] = [:]) -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])
+    {
+        var _linkRangeDic = linkRangeDic // for saving the link nsrange in attributedMsg
         let proLevel = level + 1
-        // let attributedString = NSMutableAttributedString()
-        var allText = ""
+        let attributedMsg = NSMutableAttributedString()
         
         for node: Node in nodes {
-            print("nodeLevel\(proLevel) name -> \(node.nodeName())")
+//            print("nodeLevel\(proLevel) name -> \(node.nodeName())")
             
             switch node.nodeName() {
             case "#text":
-                let text = node.getAttributes()?.get(key: "text")
-                print("nodeLevel\(proLevel) text -> \(text ?? "")")
-                
-                allText += text!
+                if let text = node.getAttributes()?.get(key: "text") {
+//                    print("nodeLevel\(proLevel) text -> \(text)")
+                    
+                    let attributedStr = text.toAttrsString(attrs: attrs)
+                    attributedMsg.append(attributedStr)
+                }
             case "span":
-                let style = node.getAttributes()?.get(key: "style")
-                print("nodeLevel\(proLevel) style -> \(style ?? "")")
-                
-                let childNodes = node.getChildNodes()
-                allText += convertNodesToAttributedString(nodes: childNodes, level: proLevel)
+                if let style = node.getAttributes()?.get(key: "style") {
+//                    print("nodeLevel\(proLevel) style -> \(style)")
+                    
+                    var newAttrs = attrs
+                    if style.range(of:"color") != nil { // is color style
+                        newAttrs[NSForegroundColorAttributeName] = colorDic[style] // TODO handle exception
+                    } else if style.range(of:"font-size") != nil { // is size style
+                        newAttrs[NSFontAttributeName] = sizeDic[style] // TODO handle exception
+                    }
+                    
+                    let childNodes = node.getChildNodes()
+//                    print("call self.")
+                    let attributedStr = convertNodesToAttributedString(
+                        nodes: childNodes,
+                        level: proLevel,
+                        attrs: newAttrs,
+                        linkRangeDic: _linkRangeDic).attributedMsg
+                    attributedMsg.append(attributedStr)
+                }
             case "img":
-                let src = node.getAttributes()?.get(key: "src")
-                print("nodeLevel\(proLevel) src -> \(src ?? "")")
+//                let src = node.getAttributes()?.get(key: "src")
+//                print("nodeLevel\(proLevel) src -> \(src ?? "")")
+//                
+//                let klass = node.getAttributes()?.get(key: "class")
+//                print("nodeLevel\(proLevel) class -> \(klass ?? "")")
                 
-                let klass = node.getAttributes()?.get(key: "class")
-                print("nodeLevel\(proLevel) class -> \(klass ?? "")")
+                
+                let img = UIImage(named: "faces/lomoji/02")
+                let attachment = NSTextAttachment()
+                attachment.image = img
+                let attachmentString = NSAttributedString(attachment: attachment)
+                let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
+                attributedMsg.append(mutableAttachmentString)
+                
                 
             case "a":
-                let href = node.getAttributes()?.get(key: "href")
-                print("nodeLevel\(proLevel) href -> \(href ?? "")")
+                if let href = node.getAttributes()?.get(key: "href") {
+                    let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim spaces in href
+                    let attributedStr = trimmedHref.toAttrsString(attrs:
+                        [
+                            // NSLinkAttributeName: URL(string: trimmedHref) ?? "",
+                            NSFontAttributeName: UIFont.systemFont(ofSize: 14),
+                            NSForegroundColorAttributeName: UIColor.green,
+                            NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
+                        ])
+                    
+                    // calculate nsrange
+                    let attributedMsgLength = (attributedMsg.string as NSString).length
+                    let herfLength = (trimmedHref as NSString).length
+                    let linkRange = NSMakeRange(attributedMsgLength, herfLength)
+                    
+                    // save the link nsrange
+                    if _linkRangeDic[trimmedHref] == nil {
+                        _linkRangeDic[trimmedHref] = []
+                    }
+                    _linkRangeDic[trimmedHref]?.append(linkRange)
+                    
+                    // append attributedStr
+                    attributedMsg.append(attributedStr)
+                    
+//                    print("nodeLevel\(proLevel) href -> \(trimmedHref)")
+                }
             default:
-                break
+                // default append text
+                if let text = node.getAttributes()?.get(key: "text") {
+//                    print("nodeLevel\(proLevel) default text -> \(text)")
+                    let attributedStr = text.toAttrsString(attrs: attrs)
+                    attributedMsg.append(attributedStr)
+                }
             }
         }
         
-        return allText
+        return (attributedMsg, _linkRangeDic)
     }
-    
-    
-    
-//    func matches(regex: String, text: String) -> [String] {
-//        do {
-//            
-//            
-//            
-//        } catch let error {
-//            print("invalid regex: \(error.localizedDescription)")
-//            return []
-//        }
-//    }
     
 }

@@ -28,6 +28,9 @@ class ThreadContentData: Mappable {
     var score: Int?
     var page: String?
     
+    // var convertedMsg: NSMutableAttributedString?
+    var parsedMsgResult: (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])?
+    
     required init?(map: Map) {}
     
     func mapping(map: Map) {
@@ -48,7 +51,7 @@ class ThreadContentData: Mappable {
         page <- map["page"]
     }
     
-    func msgNumAttrString() -> NSMutableAttributedString {
+    func msgNumAttrsString() -> NSMutableAttributedString {
         let attrs = [
             NSForegroundColorAttributeName: UIColor.orange,
             NSFontAttributeName: UIFont.systemFont(ofSize: 14)
@@ -72,7 +75,7 @@ class ThreadContentData: Mappable {
     }
     
     func titleAttrsString() -> NSMutableAttributedString {
-        return msgNumAttrString() + userNicknameAttrsString() + replyDateAttrsString()
+        return msgNumAttrsString() + userNicknameAttrsString() + replyDateAttrsString()
     }
     
     func replyDateText() -> String {
@@ -83,4 +86,11 @@ class ThreadContentData: Mappable {
         return "👍\(likeCount ?? "0")　👎\(dislikeCount ?? "0")"
     }
     
+    func getParsedMsgResult() -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])? {
+        if self.parsedMsgResult == nil {
+            self.parsedMsgResult = HtmlTagConverter.sharedInstance.parseMsg(msg)
+        }
+        return self.parsedMsgResult
+    }
+
 }

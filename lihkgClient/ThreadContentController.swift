@@ -13,6 +13,10 @@ class ThreadContentController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    @IBAction func pressItem(_ sender: UIBarButtonItem) {
+        firstCellSize()
+    }
+    
     weak var threadItem: ThreadItem?
     private var tableBinding: TableBinding?
     private let refreshControl = UIRefreshControl()
@@ -75,7 +79,7 @@ class ThreadContentController: UIViewController {
         ]
         
         self.processing = true
-        ApiConnect.sharedInstance.getThreadContent(threadId: (threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
+        ApiConnect.sharedInstance.getThreadContent(threadId: ("362109" ?? threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
         { [weak self] (response: DataResponse<ThreadContent>) in
             
             // stop table refreshing
@@ -124,6 +128,12 @@ class ThreadContentController: UIViewController {
         self.page = 1 // reset page to 1
         self.tableBinding?.clearList() // clear list
         getThreadContent()
+    }
+    
+    func firstCellSize() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = tableView.cellForRow(at: indexPath)
+        print("cell msgLabel size : \((cell as! ThreadContentDataCell).msgLabel.frame.size)")
     }
     
     deinit {
