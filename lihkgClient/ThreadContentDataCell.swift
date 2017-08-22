@@ -50,7 +50,7 @@ class ThreadContentDataCell: UITableViewCell {
         
         msgLabel.attributedText = msgAttrsString
         
-        let expectedWidth: CGFloat = 329 // REVIEW: directly observed msgLabel's width after rendered. Any method to get the width b4 rendered?
+        let expectedWidth: CGFloat = 329 // REVIEW: 329 was directly observed msgLabel's width after rendered. Any method to get the width b4 rendered?
         let expectedHeight = msgLabel.sizeThatFits(CGSize(width: expectedWidth, height: 0)).height
         
         textContainer.size = CGSize(width: expectedWidth, height: expectedHeight)
@@ -74,29 +74,37 @@ class ThreadContentDataCell: UITableViewCell {
         
         let indexOfCharacter = layoutManagerCustom.characterIndex(for: locationOfTouchInTextContainer, in: textContainer,fractionOfDistanceBetweenInsertionPoints:nil)
         
-//        print("indexOfCharacter : \(indexOfCharacter)")
+        print("indexOfCharacter : \(indexOfCharacter)")
         
         // check the indexOfCharacter in which range of the link
         if self.linkRangeDic != nil {
-            var isExitLoop = false
-            for (link, nsranges) in self.linkRangeDic! {
-                for nsrange in nsranges {
-                    if NSLocationInRange(indexOfCharacter, nsrange) {
-                        print("current link : \(link)")
-                        isExitLoop = true
+            if self.linkRangeDic!.count > 0 {
+//                print("linkRangeDic exist. \(self.linkRangeDic!)")
+                
+                var isExitLoop = false
+                for (link, nsranges) in self.linkRangeDic! {
+                    for nsrange in nsranges {
                         
-                        // TODO do url action
-                        break
-                    }
-                    
-                    if isExitLoop {
-                        break
+//                        print("link: \(link), nsrange_loc: \(nsrange.location), nsrange_len: \(nsrange.length)")
+                        
+                        
+                        if NSLocationInRange(indexOfCharacter, nsrange) {
+                            print("current link : \(link)")
+                            isExitLoop = true
+                            
+                            // TODO do url action
+                            break
+                        }
+                        
+                        if isExitLoop {
+                            break
+                        }
                     }
                 }
             }
         }
        
         
-    }
+    } // end tapMsgLabel()
     
 }

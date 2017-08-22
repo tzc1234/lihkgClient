@@ -9,6 +9,8 @@
 import Foundation
 import SwiftSoup
 import SwiftGifOrigin
+import Alamofire
+import AlamofireImage
 
 final class HtmlTagConverter {
 
@@ -43,57 +45,43 @@ final class HtmlTagConverter {
     
     private init() {}
     
+//    private let attrsMsg = NSMutableAttributedString()
+    
     // TODO handle expection
     func parseMsg(_ rawMsg: String?) -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]]) {
         if rawMsg != nil {
-            let html = "<div>\(rawMsg!)</div>"
-            let divElements = try! SwiftSoup.parse(html).select("div")
+            let html = "<lihkgClient>\(rawMsg!)</lihkgClient>"
+            let divElements = try! SwiftSoup.parse(html).select("lihkgClient")
             let nodes = divElements.first()?.getChildNodes()
             
             let result = convertNodesToAttributedString(nodes: nodes!)
-//            print("linkRangeDic : \(result.linkRangeDic)")
-            
-            
+//            print("result linkRangeDic : \(result.linkRangeDic)")
 //            print("result str : \(result.attributedMsg)")
             
-            return result
+            return (result.attributedMsg, result.linkRangeDic)
         } else {
             return (NSMutableAttributedString(), [:])
         }
     }
     
-//    func parseMsg2() {
-//        let rawMsg = ""
-//        let html = "\(rawMsg)"
-//        
-//        do {
-//            
-//            let rootElements = try SwiftSoup.parse(html).select("ul")
-//
-//            let nodes = rootElements.first()?.getChildNodes()
-//            print("\n\(convertNodesToAttributedString(nodes: nodes!))")
-//            
-//            
-//            
-//        } catch Exception.Error( _, let message){
-//            print(message)
-//        } catch {
-//            print("error")
-//        }
-//        
-//    }
-    
-    private func convertNodesToAttributedString(nodes: [Node], level: Int = 0, attrs: [String: Any] = [
+    private func convertNodesToAttributedString(
+        nodes: [Node],
+        level: Int = 0,
+        attrs: [String: Any] = [
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont.systemFont(ofSize: 17)
-        ], linkRangeDic: [String: [NSRange]] = [:]) -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])
+        ],
+        linkRangeDic: [String: [NSRange]] = [:],
+        rootAttributedMsgLength: Int = 0)
+        -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]], rootAttributedMsgLength: Int)
     {
         var _linkRangeDic = linkRangeDic // for saving the link nsrange in attributedMsg
+        let _rootAttributedMsgLength = rootAttributedMsgLength
         let proLevel = level + 1
         let attributedMsg = NSMutableAttributedString()
         
         for node: Node in nodes {
-//            print("nodeLevel\(proLevel) name -> \(node.nodeName())")
+//            print("nodeLevel\(proLevel)_tag_name -> \(node.nodeName())")
             
             switch node.nodeName() {
             case "#text":
@@ -107,57 +95,86 @@ final class HtmlTagConverter {
                 if let style = node.getAttributes()?.get(key: "style") {
 //                    print("nodeLevel\(proLevel) style -> \(style)")
                     
-                    var newAttrs = attrs
-                    if style.range(of:"color") != nil { // is color style
-                        newAttrs[NSForegroundColorAttributeName] = colorDic[style] // TODO handle exception
-                    } else if style.range(of:"font-size") != nil { // is size style
-                        newAttrs[NSFontAttributeName] = sizeDic[style] // TODO handle exception
+                    var _attrs = attrs
+                    if style.range(of: "color") != nil { // is color style
+                        _attrs[NSForegroundColorAttributeName] = colorDic[style] // TODO handle exception
+                    } else if style.range(of: "font-size") != nil { // is size style
+                        _attrs[NSFontAttributeName] = sizeDic[style] // TODO handle exception
                     }
                     
-                    let childNodes = node.getChildNodes()
-//                    print("call self.")
-                    let attributedStr = convertNodesToAttributedString(
-                        nodes: childNodes,
+                    let currentAttributedMsgLength = (attributedMsg.string as NSString).length
+                    let newRootAttributedMsgLength = currentAttributedMsgLength + rootAttributedMsgLength
+                    let result = convertNodesToAttributedString(
+                        nodes: node.getChildNodes(),
                         level: proLevel,
-                        attrs: newAttrs,
-                        linkRangeDic: _linkRangeDic).attributedMsg
-                    attributedMsg.append(attributedStr)
+                        attrs: _attrs,
+                        linkRangeDic: _linkRangeDic,
+                        rootAttributedMsgLength: newRootAttributedMsgLength)
+                    
+                    // update variables after recursion returned
+                    attributedMsg.append(result.attributedMsg)
+                    _linkRangeDic = result.linkRangeDic
                 }
             case "img":
                 let klass = node.getAttributes()?.get(key: "class")
-//                print("nodeLevel\(proLevel) class -> \(klass ?? "")")
-                if klass == "hkgmoji" {
-                    if var src = node.getAttributes()?.get(key: "src") {
-                        src.remove(at: src.startIndex)
-                        let filePath = src.components(separatedBy: ".")
-                        // print("nodeLevel\(proLevel) src -> \(filePath.first ?? "")")
+                if var src = node.getAttributes()?.get(key: "src") {
+                    // hkgmoji, load local icons.
+                    if klass == "hkgmoji" {
+                        src.remove(at: src.startIndex) // remove leading "/"
+                        let filePath = src.components(separatedBy: ".") // remove file extension
+                        
+//                        print("nodeLevel\(proLevel) src -> \(filePath.first ?? "")")
                         
                         if filePath.first != nil {
-                            //let img = UIImage(named: "faces/lomoji/02")
-                            let img = UIImage.gif(name: filePath.first!)
+                            var img: UIImage?
+                            if filePath.first!.range(of: "lomoji") != nil { // lomoji png
+                                img = UIImage(named: filePath.first!)
+                            } else { // gif icons
+//                                img = UIImage.gif(name: filePath.first!)
+                                img = UIImage.gif(name: "assets/faces/big/369")
+                            }
+                            
                             let attachment = NSTextAttachment()
                             attachment.image = img
                             let attachmentString = NSAttributedString(attachment: attachment)
                             let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
+                            
+                            
+                            print("attrbutedMsg origin length: \(attributedMsg.length)")
+                            print("Image length: \(mutableAttachmentString.length)")
                             attributedMsg.append(mutableAttachmentString)
+                            print("attrbutedMsg after length: \(attributedMsg.length)")
+                            
+                            
                         }
+                    } else { // image from url
+//                        print("nodeLevel\(proLevel)_url_image -> \(src)")
+//                        Alamofire.request(src).responseImage { response in
+//                            if let urlImage = response.result.value {
+////                                print("image downloaded: \(urlImage)")
+//                                
+//                                let attachment = NSTextAttachment()
+//                                attachment.image = urlImage
+//                                let attachmentString = NSAttributedString(attachment: attachment)
+//                                let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
+//                                attributedMsg.append(mutableAttachmentString)
+//                            }
+//                        }
                     }
                 }
             case "a":
                 if let href = node.getAttributes()?.get(key: "href") {
-                    let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim spaces in href
+                    let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim spaces from href
                     let attributedStr = trimmedHref.toAttrsString(attrs:
                         [
-                            // NSLinkAttributeName: URL(string: trimmedHref) ?? "",
                             NSFontAttributeName: UIFont.systemFont(ofSize: 14),
-                            NSForegroundColorAttributeName: UIColor.green,
-                            // NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
+                            NSForegroundColorAttributeName: UIColor.green
                         ])
                     
                     // calculate nsrange
-                    let attributedMsgLength = (attributedMsg.string as NSString).length
+                    let currentLevelAttributedMsgLength = (attributedMsg.string as NSString).length
                     let herfLength = (trimmedHref as NSString).length
-                    let linkRange = NSMakeRange(attributedMsgLength, herfLength)
+                    let linkRange = NSMakeRange(currentLevelAttributedMsgLength + rootAttributedMsgLength, herfLength)
                     
                     // save the link nsrange
                     if _linkRangeDic[trimmedHref] == nil {
@@ -165,11 +182,24 @@ final class HtmlTagConverter {
                     }
                     _linkRangeDic[trimmedHref]?.append(linkRange)
                     
-                    // append attributedStr
                     attributedMsg.append(attributedStr)
                     
-//                    print("nodeLevel\(proLevel) href -> \(trimmedHref)")
+                    // print("_linkRangeDic: \(_linkRangeDic)")
+                    // print("nodeLevel\(proLevel) href -> \(trimmedHref)")
                 }
+            case "div":
+                let currentAttributedMsgLength = (attributedMsg.string as NSString).length
+                let newRootAttributedMsgLength = currentAttributedMsgLength + rootAttributedMsgLength
+                let result = convertNodesToAttributedString(
+                    nodes: node.getChildNodes(),
+                    level: proLevel,
+                    attrs: attrs,
+                    linkRangeDic: _linkRangeDic,
+                    rootAttributedMsgLength: newRootAttributedMsgLength)
+                
+                // update variables after recursion returned
+                attributedMsg.append(result.attributedMsg)
+                _linkRangeDic = result.linkRangeDic
             default:
                 if let text = node.getAttributes()?.get(key: "text") { // default append text
 //                    print("nodeLevel\(proLevel) default text -> \(text)")
@@ -179,7 +209,7 @@ final class HtmlTagConverter {
             }
         }
         
-        return (attributedMsg, _linkRangeDic)
+        return (attributedMsg, _linkRangeDic, _rootAttributedMsgLength)
     }
     
 }

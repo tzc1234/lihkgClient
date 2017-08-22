@@ -8,6 +8,7 @@ target 'lihkgClient' do
   # Pods for lihkgClient
   pod 'Alamofire'
   pod 'AlamofireObjectMapper'
+  pod 'AlamofireImage'
   pod 'DateToolsSwift'
   pod 'SwiftSoup'
   pod 'SwiftGifOrigin'

@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (4.5.0)
+  - AlamofireImage (3.2.0):
+    - Alamofire (~> 4.1)
   - AlamofireObjectMapper (4.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 2.0)
@@ -10,6 +12,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AlamofireImage
   - AlamofireObjectMapper
   - DateToolsSwift
   - SwiftGifOrigin
@@ -17,12 +20,13 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
   DateToolsSwift: bf69bf9056d9e53c5c03f06e51f219b9b8b02f9e
   ObjectMapper: 3d571bb5af471c779e1160828cd9ad5c4ef90958
   SwiftGifOrigin: d6679d3ebe9df2e049a84bc52582635107b581f6
   SwiftSoup: 9638363718859b469c3d7877b2b6a640348bacb7
 
-PODFILE CHECKSUM: 14ea50b841eed5dabb67ae4649e4a4d8ca5b2a6c
+PODFILE CHECKSUM: 4ef756fa4a203b1b98f022bc31a3272224558924
 
 COCOAPODS: 1.2.1

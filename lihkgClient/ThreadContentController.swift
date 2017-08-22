@@ -79,7 +79,7 @@ class ThreadContentController: UIViewController {
         ]
         
         self.processing = true
-        ApiConnect.sharedInstance.getThreadContent(threadId: ("344206" ?? threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
+        ApiConnect.sharedInstance.getThreadContent(threadId: ("367858" ?? threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
         { [weak self] (response: DataResponse<ThreadContent>) in
             
             // stop table refreshing
