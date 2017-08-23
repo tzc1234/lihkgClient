@@ -18,7 +18,7 @@ class ThreadContentDataCell: UITableViewCell {
     // reference: https://stackoverflow.com/a/28519273
     var layoutManagerCustom = NSLayoutManager()
     let textContainer = NSTextContainer(size: CGSize.zero)
-    let textStorage = NSTextStorage()
+    var textStorage = NSTextStorage()
     
     var linkRangeDic: [String: [NSRange]]?
     
@@ -50,7 +50,8 @@ class ThreadContentDataCell: UITableViewCell {
         
         msgLabel.attributedText = msgAttrsString
         
-        let expectedWidth: CGFloat = 329 // REVIEW: 329 was directly observed msgLabel's width after rendered. Any method to get the width b4 rendered?
+        // REVIEW: 329 was directly observed msgLabel's width after rendered. Any method to get the width b4 rendered?
+        let expectedWidth: CGFloat = 329
         let expectedHeight = msgLabel.sizeThatFits(CGSize(width: expectedWidth, height: 0)).height
         
         textContainer.size = CGSize(width: expectedWidth, height: expectedHeight)
@@ -58,13 +59,13 @@ class ThreadContentDataCell: UITableViewCell {
     }
     
     func tapMsgLabel(sender: UITapGestureRecognizer) {
+        // update textStorage attributedString
+        // TODO handle msgLabel.attributedText is nil
+        textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length), with: msgLabel.attributedText!)
+        
         let locationOfTouchInLabel = sender.location(in: sender.view)
         let labelSize = sender.view!.bounds.size
-        
-        //print(labelSize)
-        
         let textBoundingBox = layoutManagerCustom.usedRect(for: textContainer)
-        //print(textBoundingBox)
         
         let x = (labelSize.width - textBoundingBox.size.width) * 0.5 - textBoundingBox.origin.x
         let y = (labelSize.height - textBoundingBox.size.height) * 0.5 - textBoundingBox.origin.y

@@ -16,6 +16,8 @@ final class HtmlTagConverter {
 
     static let sharedInstance = HtmlTagConverter() // Shared Instance
     
+    private let imgChar = "☐" // default image character, make sure the default image character is 1 length
+    
     // color dictionary
     private let colorDic = [
         "color: red;": UIColor.red,
@@ -57,6 +59,25 @@ final class HtmlTagConverter {
             let result = convertNodesToAttributedString(nodes: nodes!)
 //            print("result linkRangeDic : \(result.linkRangeDic)")
 //            print("result str : \(result.attributedMsg)")
+//            print("urlImagLocs : \(result.urlImgLocs)")
+            
+            // insert url images asyn
+            for (link, locations) in result.urlImgLocs {
+                for location in locations {
+                    Alamofire.request(link).responseImage { response in
+                        if let urlImage = response.result.value {
+                            
+                            let attachment = NSTextAttachment()
+                            attachment.image = urlImage
+                            let attachmentString = NSAttributedString(attachment: attachment)
+                            let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
+                            
+                            let nsrange = NSRange(location: location, length: 1) // the length must be 1
+                            result.attributedMsg.replaceCharacters(in: nsrange, with: mutableAttachmentString)
+                        }
+                    }
+                }
+            }
             
             return (result.attributedMsg, result.linkRangeDic)
         } else {
@@ -72,11 +93,15 @@ final class HtmlTagConverter {
             NSFontAttributeName: UIFont.systemFont(ofSize: 17)
         ],
         linkRangeDic: [String: [NSRange]] = [:],
-        rootAttributedMsgLength: Int = 0)
-        -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]], rootAttributedMsgLength: Int)
+        rootAttributedMsgLength: Int = 0,
+        urlImgLocs: [String: [Int]] = [:])
+        ->
+        (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]], rootAttributedMsgLength: Int, urlImgLocs: [String: [Int]])
     {
         var _linkRangeDic = linkRangeDic // for saving the link nsrange in attributedMsg
         let _rootAttributedMsgLength = rootAttributedMsgLength
+        var _urlImgLocs = urlImgLocs
+        
         let proLevel = level + 1
         let attributedMsg = NSMutableAttributedString()
         
@@ -109,29 +134,29 @@ final class HtmlTagConverter {
                         level: proLevel,
                         attrs: _attrs,
                         linkRangeDic: _linkRangeDic,
-                        rootAttributedMsgLength: newRootAttributedMsgLength)
+                        rootAttributedMsgLength: newRootAttributedMsgLength,
+                        urlImgLocs: _urlImgLocs)
                     
                     // update variables after recursion returned
                     attributedMsg.append(result.attributedMsg)
                     _linkRangeDic = result.linkRangeDic
+                    _urlImgLocs = result.urlImgLocs
                 }
             case "img":
                 let klass = node.getAttributes()?.get(key: "class")
-                if var src = node.getAttributes()?.get(key: "src") {
-                    // hkgmoji, load local icons.
-                    if klass == "hkgmoji" {
-                        src.remove(at: src.startIndex) // remove leading "/"
-                        let filePath = src.components(separatedBy: ".") // remove file extension
-                        
-//                        print("nodeLevel\(proLevel) src -> \(filePath.first ?? "")")
+                if let src = node.getAttributes()?.get(key: "src") {
+                    var link = src.trimmingCharacters(in: .whitespaces) // trim whitespaces
+                    
+                    if klass == "hkgmoji" { // hkgmoji, load local icons.
+                        link.remove(at: link.startIndex) // remove leading "/"
+                        let filePath = link.components(separatedBy: ".") // remove file extension
                         
                         if filePath.first != nil {
                             var img: UIImage?
                             if filePath.first!.range(of: "lomoji") != nil { // lomoji png
                                 img = UIImage(named: filePath.first!)
                             } else { // gif icons
-//                                img = UIImage.gif(name: filePath.first!)
-                                img = UIImage.gif(name: "assets/faces/big/369")
+                                img = UIImage.gif(name: filePath.first!)
                             }
                             
                             let attachment = NSTextAttachment()
@@ -139,32 +164,26 @@ final class HtmlTagConverter {
                             let attachmentString = NSAttributedString(attachment: attachment)
                             let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
                             
-                            
-                            print("attrbutedMsg origin length: \(attributedMsg.length)")
-                            print("Image length: \(mutableAttachmentString.length)")
                             attributedMsg.append(mutableAttachmentString)
-                            print("attrbutedMsg after length: \(attributedMsg.length)")
-                            
-                            
                         }
                     } else { // image from url
-//                        print("nodeLevel\(proLevel)_url_image -> \(src)")
-//                        Alamofire.request(src).responseImage { response in
-//                            if let urlImage = response.result.value {
-////                                print("image downloaded: \(urlImage)")
-//                                
-//                                let attachment = NSTextAttachment()
-//                                attachment.image = urlImage
-//                                let attachmentString = NSAttributedString(attachment: attachment)
-//                                let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
-//                                attributedMsg.append(mutableAttachmentString)
-//                            }
-//                        }
+                        // calculate and save the image loc
+                        if _urlImgLocs[link] == nil {
+                            _urlImgLocs[link] = []
+                        }
+                        
+                        let currentAttributedMsgLength = (attributedMsg.string as NSString).length
+                        let linkLocation = currentAttributedMsgLength + rootAttributedMsgLength
+                        _urlImgLocs[link]?.append(linkLocation)
+                        
+                        // add default img character to attributedMsg first
+                        attributedMsg.append(self.imgChar.toAttrsString())
                     }
+                    
                 }
             case "a":
                 if let href = node.getAttributes()?.get(key: "href") {
-                    let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim spaces from href
+                    let trimmedHref = href.trimmingCharacters(in: .whitespaces) // trim whitespaces
                     let attributedStr = trimmedHref.toAttrsString(attrs:
                         [
                             NSFontAttributeName: UIFont.systemFont(ofSize: 14),
@@ -195,13 +214,34 @@ final class HtmlTagConverter {
                     level: proLevel,
                     attrs: attrs,
                     linkRangeDic: _linkRangeDic,
-                    rootAttributedMsgLength: newRootAttributedMsgLength)
+                    rootAttributedMsgLength: newRootAttributedMsgLength,
+                    urlImgLocs: _urlImgLocs)
                 
                 // update variables after recursion returned
                 attributedMsg.append(result.attributedMsg)
                 _linkRangeDic = result.linkRangeDic
-            default:
-                if let text = node.getAttributes()?.get(key: "text") { // default append text
+                _urlImgLocs = result.urlImgLocs
+            case "strong":
+                // TODO bold
+//                var _attrs = attrs
+//                _attrs["NSFontAttributeName"] = UIFont.boldSystemFont(ofSize: 17)
+                
+                let currentAttributedMsgLength = (attributedMsg.string as NSString).length
+                let newRootAttributedMsgLength = currentAttributedMsgLength + rootAttributedMsgLength
+                let result = convertNodesToAttributedString(
+                    nodes: node.getChildNodes(),
+                    level: proLevel,
+                    attrs: attrs,
+                    linkRangeDic: _linkRangeDic,
+                    rootAttributedMsgLength: newRootAttributedMsgLength,
+                    urlImgLocs: _urlImgLocs)
+                
+                // update variables after recursion returned
+                attributedMsg.append(result.attributedMsg)
+                _linkRangeDic = result.linkRangeDic
+                _urlImgLocs = result.urlImgLocs
+            default: // default append text
+                if let text = node.getAttributes()?.get(key: "text"), !text.isEmpty {
 //                    print("nodeLevel\(proLevel) default text -> \(text)")
                     let attributedStr = text.toAttrsString(attrs: attrs)
                     attributedMsg.append(attributedStr)
@@ -209,7 +249,7 @@ final class HtmlTagConverter {
             }
         }
         
-        return (attributedMsg, _linkRangeDic, _rootAttributedMsgLength)
+        return (attributedMsg, _linkRangeDic, _rootAttributedMsgLength, _urlImgLocs)
     }
     
 }
