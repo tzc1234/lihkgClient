@@ -18,7 +18,7 @@ class ThreadContentController: UIViewController {
     }
     
     weak var threadItem: ThreadItem?
-    private var tableBinding: TableBinding?
+    private var tableBinding: TableBindingWithRowHeight?
     private let refreshControl = UIRefreshControl()
     
     // api call control variables
@@ -32,24 +32,28 @@ class ThreadContentController: UIViewController {
         return navigationController?.isNavigationBarHidden ?? false
     }
     
+    // temporary save the cells' indexPath ready for reload
+    private var cellIndexPaths = [IndexPath]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = threadItem?.title
         
+        // add notification observer
+        NotificationCenter.default.addObserver(self, selector: #selector(ThreadContentController.collectReadyToReloadCellIndexPath(notification:)), name: Notification.Name("reloadThreadContentDataCell"), object: nil)
+        
         // register xib cell
         tableView.register(UINib.init(nibName: "ThreadContentDataCell", bundle: nil), forCellReuseIdentifier: "ThreadContentDataCell")
         
-        tableView.estimatedRowHeight = 66
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
         // set table binding
-        tableBinding = TableBinding(tableView: tableView)
+        tableBinding = TableBindingWithRowHeight(tableView: tableView)
         tableBinding?.setDataSource()
         tableBinding?.events.cellForRow = { [weak self] indexPath, record in
             let cell = self?.tableView.dequeueReusableCell(withIdentifier: "ThreadContentDataCell", for: indexPath) as! ThreadContentDataCell
             
             let threadContentData = record as? ThreadContentData
             if threadContentData != nil {
+                threadContentData?.htmlTagConverter?.cellIndexPath = indexPath
                 cell.setThreadContentData(threadContentData: threadContentData!)
             }
             
@@ -59,6 +63,23 @@ class ThreadContentController: UIViewController {
             if !(self?.processing)! && !(self?.isLastPage)! { // not processing and not last page
                 self?.getThreadContent()
                 return
+            }
+        }
+        tableBinding?.events.heightForRow = { indexPath, record in
+            let defaultCellHeight: CGFloat = 66
+            let threadContentData = record as? ThreadContentData
+            if threadContentData != nil {
+                return threadContentData?.htmlTagConverter?.getExpectedCellHeight() ?? defaultCellHeight
+            } else {
+                return defaultCellHeight
+            }
+        }
+        tableBinding?.events.tableStopScrolling = { [weak self] in
+            while !(self?.cellIndexPaths.isEmpty)! {
+                let path = self?.cellIndexPaths.removeLast()
+                if (self?.tableView.indexPathsForVisibleRows?.contains(path!))! {
+                    self?.tableView.reloadRows(at: [path!], with: .none)
+                }
             }
         }
         
@@ -74,12 +95,10 @@ class ThreadContentController: UIViewController {
     }
 
     private func getThreadContent() {
-        let parameters: Parameters = [
-            "order": "reply_time"
-        ]
+        let parameters: Parameters = ["order": "reply_time"]
         
         self.processing = true
-        ApiConnect.sharedInstance.getThreadContent(threadId: ("370456" ?? threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
+        ApiConnect.sharedInstance.getThreadContent(threadId: (threadItem?.threadId ?? ""), page: "\(page)", parameters: parameters).responseObject(keyPath: "response")
         { [weak self] (response: DataResponse<ThreadContent>) in
             
             // stop table refreshing
@@ -88,7 +107,7 @@ class ThreadContentController: UIViewController {
             }
             
             switch response.result {
-            case .success(let threadContent): // not necessary reference threadContent
+            case .success(let threadContent):
                 //print(threadContent.toJSONString(prettyPrint: true) ?? "nil")
                 
                 let threadContentDataItems = threadContent.itemData
@@ -136,7 +155,17 @@ class ThreadContentController: UIViewController {
         print("cell msgLabel size : \((cell as! ThreadContentDataCell).msgLabel.frame.size)")
     }
     
+    func collectReadyToReloadCellIndexPath(notification: Notification) {
+        if let path = notification.object as? IndexPath {
+            // append different indexPath in self.cellIndexPaths
+            if !self.cellIndexPaths.contains(path) {
+                self.cellIndexPaths.append(path)
+            }
+        }
+    }
+    
     deinit {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("reloadThreadContentDataCell"), object: nil)
         print("ThreadContentController dealloc.")
     }
 }

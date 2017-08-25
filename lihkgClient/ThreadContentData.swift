@@ -21,15 +21,18 @@ class ThreadContentData: Mappable {
     var voteScore: String?
     
     var replyDate: Date?
-    var msg: String?
+    var msg: String? {
+        didSet {
+            self.htmlTagConverter = HtmlTagConverter(rawMsg: msg!)
+        }
+    }
     
     var user: User?
     var msgNum: Int?
     var score: Int?
     var page: String?
     
-    // var convertedMsg: NSMutableAttributedString?
-    var parsedMsgResult: (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])?
+    var htmlTagConverter: HtmlTagConverter?
     
     required init?(map: Map) {}
     
@@ -86,11 +89,4 @@ class ThreadContentData: Mappable {
         return "👍\(likeCount ?? "0")　👎\(dislikeCount ?? "0")"
     }
     
-    func getParsedMsgResult() -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]])? {
-        if self.parsedMsgResult == nil {
-            self.parsedMsgResult = HtmlTagConverter.sharedInstance.parseMsg(msg)
-        }
-        return self.parsedMsgResult
-    }
-
 }

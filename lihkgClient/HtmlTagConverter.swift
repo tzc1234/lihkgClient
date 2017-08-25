@@ -12,76 +12,119 @@ import SwiftGifOrigin
 import Alamofire
 import AlamofireImage
 
-final class HtmlTagConverter {
+class MyTextAttachment : NSTextAttachment {
+    
+//    override public var image: UIImage? {
+//        didSet {
+//            print("image size : \(image!.size)")
+//        }
+//    }
+    
+    var loc: Int?
+    var isGif = false
+    
+//    override func image(forBounds imageBounds: CGRect,
+//                        textContainer: NSTextContainer?,
+//                        characterIndex charIndex: Int) -> UIImage?{
+//        
+//        print("imageBounds: \(imageBounds)")
+//
+//        if let attributedString = textContainer?.layoutManager?.textStorage {
+//            print("string : \(attributedString.string)")
+//            let nsrange = NSRange(location: customLoc!, length: 1)
+//            textContainer?.layoutManager?.invalidateDisplay(forCharacterRange: nsrange)
+//        }
+//        
+//        
+//        return super.image(forBounds: imageBounds, textContainer: textContainer, characterIndex: charIndex)
+//    }
+    
+    override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+        
+//        print("lineFrag : \(lineFrag)")
+        
+       return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
+    }
+    
+}
 
-    static let sharedInstance = HtmlTagConverter() // Shared Instance
+class HtmlTagConverter {
+
+    private let imgPlaceholder = "☐" // default image character, make sure the default image character is 1 length
+    private var rawMsg: String
     
-    private let imgChar = "☐" // default image character, make sure the default image character is 1 length
+    var cellIndexPath: IndexPath?
     
-    // color dictionary
-    private let colorDic = [
-        "color: red;": UIColor.red,
-        "color: green;": UIColor.green,
-        "color: blue;": UIColor.blue,
-        "color: purple;": UIColor.purple,
-        "color: violet;": UIColor(rgb: 0xEE82EE),
-        "color: brown;": UIColor.brown,
-        "color: pink;": UIColor(rgb: 0xFFC0CB),
-        "color: orange;": UIColor.orange,
-        "color: gold;": UIColor(rgb: 0xFFD700),
-        "color: maroon;": UIColor(rgb: 0x800000),
-        "color: teal;": UIColor(rgb: 0x008080),
-        "color: navy;": UIColor(rgb: 0x000080),
-        "color: limegreen;": UIColor(rgb: 0x32CD32)
-    ]
+    var attributedMsg: NSMutableAttributedString?
+    var linkRanges: [String: [NSRange]]?
+    var urlImgLocs: [String: [Int]]?
     
-    // size dictionary
-    private let sizeDic = [
-        "font-size: x-small;": UIFont.systemFont(ofSize: 12),
-        "font-size: small;": UIFont.systemFont(ofSize: 14),
-        "font-size: medium;": UIFont.systemFont(ofSize: 17),
-        "font-size: large;": UIFont.systemFont(ofSize: 20),
-        "font-size: x-large;": UIFont.systemFont(ofSize: 22),
-        "font-size: xx-large;": UIFont.systemFont(ofSize: 24)
-    ]
+    init(rawMsg: String) {
+        self.rawMsg = rawMsg
+        parseRawMsg()
+    }
     
-    private init() {}
+    // TODO handle expection case!
+    func parseRawMsg() {
+        let html = "<lihkgClient>\(self.rawMsg)</lihkgClient>"
+        let lihkgClientElements = try! SwiftSoup.parse(html).select("lihkgClient")
+        let nodes = lihkgClientElements.first()?.getChildNodes()
+        
+        let result = convertNodesToAttributedString(nodes: nodes!)
+        self.attributedMsg = result.attributedMsg
+        self.linkRanges = result.linkRangeDic
+        self.urlImgLocs = result.urlImgLocs
+        
+        asyncLoadImages()
+    }
     
-//    private let attrsMsg = NSMutableAttributedString()
+    private let prototypeLabel = UILabel()
+    func getExpectedCellHeight() -> CGFloat {
+        self.prototypeLabel.numberOfLines = 0
+        self.prototypeLabel.attributedText = self.attributedMsg
+        
+        let expectedWidth: CGFloat = ThreadContentDataCell.msgLabelWidth
+        let expectedHeight = self.prototypeLabel.sizeThatFits(CGSize(width: expectedWidth, height: CGFloat.greatestFiniteMagnitude)).height
+        
+        return expectedHeight + ThreadContentDataCell.baseCellHeight
+    }
     
-    // TODO handle expection
-    func parseMsg(_ rawMsg: String?) -> (attributedMsg: NSMutableAttributedString, linkRangeDic: [String: [NSRange]]) {
-        if rawMsg != nil {
-            let html = "<lihkgClient>\(rawMsg!)</lihkgClient>"
-            let divElements = try! SwiftSoup.parse(html).select("lihkgClient")
-            let nodes = divElements.first()?.getChildNodes()
-            
-            let result = convertNodesToAttributedString(nodes: nodes!)
-//            print("result linkRangeDic : \(result.linkRangeDic)")
-//            print("result str : \(result.attributedMsg)")
-//            print("urlImagLocs : \(result.urlImgLocs)")
-            
-            // insert url images asyn
-            for (link, locations) in result.urlImgLocs {
+    func asyncLoadImages() {
+        if self.urlImgLocs != nil {
+            for (link, locations) in self.urlImgLocs! {
                 for location in locations {
-                    Alamofire.request(link).responseImage { response in
+                    Alamofire.request(link).responseImage { [weak self] response in
                         if let urlImage = response.result.value {
+                            let attachment = MyTextAttachment()
                             
-                            let attachment = NSTextAttachment()
+                            // scale down the image size
+                            let imgWidth = urlImage.size.width
+                            if imgWidth > ThreadContentDataCell.msgLabelWidth {
+                                let ratio = imgWidth / ThreadContentDataCell.msgLabelWidth
+                                let imgHeight = urlImage.size.height / ratio
+                                attachment.bounds = CGRect(x: 0, y: 0, width: ThreadContentDataCell.msgLabelWidth, height: imgHeight)
+                            }
+                            
                             attachment.image = urlImage
+                            attachment.loc = location
+                            if link.lowercased().range(of: ".gif") != nil {
+                                attachment.isGif = true
+                            }
+                            
                             let attachmentString = NSAttributedString(attachment: attachment)
                             let mutableAttachmentString = NSMutableAttributedString(attributedString: attachmentString)
                             
                             let nsrange = NSRange(location: location, length: 1) // the length must be 1
-                            result.attributedMsg.replaceCharacters(in: nsrange, with: mutableAttachmentString)
+                            self?.attributedMsg?.replaceCharacters(in: nsrange, with: mutableAttachmentString)
+                            
+                            print("load image success.")
+                            
+                            // sent notifications for reloading correspondence table cell
+                            NotificationCenter.default.post(name: Notification.Name("reloadThreadContentDataCell"), object: self?.cellIndexPath)
                         }
                     }
                 }
             }
-            
-            return (result.attributedMsg, result.linkRangeDic)
-        } else {
-            return (NSMutableAttributedString(), [:])
         }
     }
     
@@ -122,9 +165,9 @@ final class HtmlTagConverter {
                     
                     var _attrs = attrs
                     if style.range(of: "color") != nil { // is color style
-                        _attrs[NSForegroundColorAttributeName] = colorDic[style] // TODO handle exception
+                        _attrs[NSForegroundColorAttributeName] = LihkgHtmlStyles.colorDictionary[style] // TODO handle exception
                     } else if style.range(of: "font-size") != nil { // is size style
-                        _attrs[NSFontAttributeName] = sizeDic[style] // TODO handle exception
+                        _attrs[NSFontAttributeName] = LihkgHtmlStyles.sizeDictionary[style] // TODO handle exception
                     }
                     
                     let currentAttributedMsgLength = (attributedMsg.string as NSString).length
@@ -177,7 +220,7 @@ final class HtmlTagConverter {
                         _urlImgLocs[link]?.append(linkLocation)
                         
                         // add default img character to attributedMsg first
-                        attributedMsg.append(self.imgChar.toAttrsString())
+                        attributedMsg.append(self.imgPlaceholder.toAttrsString())
                     }
                     
                 }

@@ -10,6 +10,9 @@ import UIKit
 
 class ThreadContentDataCell: UITableViewCell {
 
+    static let baseCellHeight: CGFloat = 8 + 10 + 10 + 45
+    static let msgLabelWidth: CGFloat = 329
+    
     @IBOutlet weak var msgLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
@@ -44,14 +47,13 @@ class ThreadContentDataCell: UITableViewCell {
         titleLabel.attributedText = threadContentData.titleAttrsString()
         likeButton.setTitle(threadContentData.likeCountDislikeCountText(), for: .normal)
         
-        let parsedMsgResult = threadContentData.getParsedMsgResult()
-        let msgAttrsString = parsedMsgResult?.attributedMsg ?? NSMutableAttributedString()
-        self.linkRangeDic = parsedMsgResult?.linkRangeDic // get back the link range collection
+        let msgAttrsString = threadContentData.htmlTagConverter?.attributedMsg ?? NSMutableAttributedString()
+        self.linkRangeDic = threadContentData.htmlTagConverter?.linkRanges // get back the link range collection
         
         msgLabel.attributedText = msgAttrsString
         
         // REVIEW: 329 was directly observed msgLabel's width after rendered. Any method to get the width b4 rendered?
-        let expectedWidth: CGFloat = 329
+        let expectedWidth: CGFloat = ThreadContentDataCell.msgLabelWidth
         let expectedHeight = msgLabel.sizeThatFits(CGSize(width: expectedWidth, height: 0)).height
         
         textContainer.size = CGSize(width: expectedWidth, height: expectedHeight)
@@ -73,7 +75,7 @@ class ThreadContentDataCell: UITableViewCell {
         let locationOfTouchInTextContainer =
             CGPoint(x: locationOfTouchInLabel.x - textContainerOffset.x, y: locationOfTouchInLabel.y - textContainerOffset.y)
         
-        let indexOfCharacter = layoutManagerCustom.characterIndex(for: locationOfTouchInTextContainer, in: textContainer,fractionOfDistanceBetweenInsertionPoints:nil)
+        let indexOfCharacter = layoutManagerCustom.characterIndex(for: locationOfTouchInTextContainer, in: textContainer,fractionOfDistanceBetweenInsertionPoints: nil)
         
         print("indexOfCharacter : \(indexOfCharacter)")
         
@@ -85,10 +87,6 @@ class ThreadContentDataCell: UITableViewCell {
                 var isExitLoop = false
                 for (link, nsranges) in self.linkRangeDic! {
                     for nsrange in nsranges {
-                        
-//                        print("link: \(link), nsrange_loc: \(nsrange.location), nsrange_len: \(nsrange.length)")
-                        
-                        
                         if NSLocationInRange(indexOfCharacter, nsrange) {
                             print("current link : \(link)")
                             isExitLoop = true
@@ -105,6 +103,7 @@ class ThreadContentDataCell: UITableViewCell {
             }
         }
        
+//        print("msgLabel height: \(msgLabel.frame.size.height)")
         
     } // end tapMsgLabel()
     

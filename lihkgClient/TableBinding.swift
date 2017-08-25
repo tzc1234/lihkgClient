@@ -11,10 +11,13 @@ import UIKit
 struct TableBindingEvent {
     var numOfSections: (() -> Int)?
     var numOfRows: ((Int) -> Int)?
-    var heightForRow: ((IndexPath) -> CGFloat)?
+    var heightForRow: ((IndexPath, Any?) -> CGFloat)?
     var cellForRow: ((IndexPath, Any?) -> UITableViewCell)?
     var tableReachBottom: (() -> Void)?
     var rowSelected: ((IndexPath, Any?) -> Void)?
+    var estimatedHeightForRow: ((IndexPath) -> CGFloat)?
+    
+    var tableStopScrolling: (() -> Void)?
 }
 
 class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -77,6 +80,11 @@ class TableBinding: NSObject, UITableViewDelegate, UITableViewDataSource {
         // print("did select")
         events.rowSelected?(indexPath, getRecord(indexPath: indexPath))
     }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return events.estimatedHeightForRow?(indexPath) ?? UITableViewAutomaticDimension
+    }
+    
     
     // ************** scroll view delegate **************
     

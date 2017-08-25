@@ -22,6 +22,8 @@
 		BEF41AAA1F3B23A600987A75 /* ThreadContentDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */; };
 		BEF41AAB1F3B23A600987A75 /* ThreadContentDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */; };
 		BEF4F8821F41B30300C7A80F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4F8811F41B30300C7A80F /* Extensions.swift */; };
+		BEF5DBB01F4EBCD200D2E8CF /* LihkgHtmlStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5DBAF1F4EBCD200D2E8CF /* LihkgHtmlStyles.swift */; };
+		BEF613461F4FF6F800AAB983 /* TableBindingWithRowHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF613451F4FF6F800AAB983 /* TableBindingWithRowHeight.swift */; };
 		BEF663781F2489E8001D6450 /* Threads.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF663771F2489E8001D6450 /* Threads.swift */; };
 		BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF692D01F35B637002043AA /* ThreadCell.swift */; };
 		BEF692D31F35B637002043AA /* ThreadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF692D11F35B637002043AA /* ThreadCell.xib */; };
@@ -49,6 +51,8 @@
 		BEF41AA81F3B23A600987A75 /* ThreadContentDataCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadContentDataCell.swift; sourceTree = "<group>"; };
 		BEF41AA91F3B23A600987A75 /* ThreadContentDataCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadContentDataCell.xib; sourceTree = "<group>"; };
 		BEF4F8811F41B30300C7A80F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		BEF5DBAF1F4EBCD200D2E8CF /* LihkgHtmlStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LihkgHtmlStyles.swift; sourceTree = "<group>"; };
+		BEF613451F4FF6F800AAB983 /* TableBindingWithRowHeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableBindingWithRowHeight.swift; sourceTree = "<group>"; };
 		BEF663771F2489E8001D6450 /* Threads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threads.swift; sourceTree = "<group>"; };
 		BEF692D01F35B637002043AA /* ThreadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadCell.swift; sourceTree = "<group>"; };
 		BEF692D11F35B637002043AA /* ThreadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreadCell.xib; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 				BEF4F8811F41B30300C7A80F /* Extensions.swift */,
 				BE8BB09C1F2350D900F4E990 /* ApiConnect.swift */,
 				BEFC8F551F42E3AE001AB34C /* HtmlTagConverter.swift */,
+				BEF5DBAF1F4EBCD200D2E8CF /* LihkgHtmlStyles.swift */,
 			);
 			name = helpers;
 			sourceTree = "<group>";
@@ -174,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				BEFC57B51F34838900248830 /* TableBinding.swift */,
+				BEF613451F4FF6F800AAB983 /* TableBindingWithRowHeight.swift */,
 			);
 			name = bindings;
 			sourceTree = "<group>";
@@ -317,12 +323,14 @@
 				BEF41AA51F3B0AE600987A75 /* User.swift in Sources */,
 				BE051D591F39A1A2000FD702 /* ThreadContentController.swift in Sources */,
 				BEF692D21F35B637002043AA /* ThreadCell.swift in Sources */,
+				BEF613461F4FF6F800AAB983 /* TableBindingWithRowHeight.swift in Sources */,
 				BEF692D61F35C84C002043AA /* ThreadTableView.swift in Sources */,
 				BEFC57B61F34838900248830 /* TableBinding.swift in Sources */,
 				BE8BB0891F233B9B00F4E990 /* ViewController.swift in Sources */,
 				BEF41AA31F3B082900987A75 /* ThreadContent.swift in Sources */,
 				BE8BB0871F233B9B00F4E990 /* AppDelegate.swift in Sources */,
 				BE8BB09D1F2350D900F4E990 /* ApiConnect.swift in Sources */,
+				BEF5DBB01F4EBCD200D2E8CF /* LihkgHtmlStyles.swift in Sources */,
 				BEFC8F561F42E3AE001AB34C /* HtmlTagConverter.swift in Sources */,
 				BEF4F8821F41B30300C7A80F /* Extensions.swift in Sources */,
 				BEF663781F2489E8001D6450 /* Threads.swift in Sources */,
